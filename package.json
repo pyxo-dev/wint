@@ -1,0 +1,13 @@
+{
+  "name": "@ejez/wint",
+  "version": "0.0.1",
+  "description": "Wint (Web Internationalization), a library to make your web app i18n easier.",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "repository": "https://github.com/ejez/wint",
+  "author": "Ejez <ejez@protonmail.ch>",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint --ext .js,.ts ./src/"
+  }
+}
