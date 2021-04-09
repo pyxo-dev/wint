@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "strict": true,
+    "target": "esnext",
+    "declaration": true,
+    "declarationMap": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "wint": ["src"]
+    },
+
+    "outDir": "dist"
+  },
+  "include": ["src/**/*"]
+}
