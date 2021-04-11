@@ -8,14 +8,18 @@
   "author": "Ejez <ejez@protonmail.ch>",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint --ext .js,.ts ./src/"
+    "lint": "eslint --ext .js,.ts ./src/",
+    "test": "jest src/"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.22",
     "@types/negotiator": "^0.6.1",
     "@typescript-eslint/eslint-plugin": "^4.21.0",
     "@typescript-eslint/parser": "^4.21.0",
     "eslint": "^7.23.0",
     "eslint-config-prettier": "^8.1.0",
+    "jest": "^26.6.3",
+    "ts-jest": "^26.5.4",
     "typescript": "^4.2.4"
   },
   "engines": {
