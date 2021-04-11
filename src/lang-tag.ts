@@ -216,8 +216,8 @@ string.
 
   if (mode === 'prefix' || mode === void 0) {
     // Note: `globalThis` requires node >=12.0.0
-    const prefixLangTag = (urlPath || globalThis.location.pathname)
-      .split('/')[1]
+    const prefixLangTag = (urlPath || globalThis?.location?.pathname)
+      ?.split('/')[1]
       .toLowerCase()
 
     if (prefixLangTag) {
@@ -232,7 +232,7 @@ string.
   /////////////////////////////////////////////////////////////////////////////
 
   if (mode === 'subdomain' || mode === 'host') {
-    const host = (urlHost || globalThis.location.host).toLowerCase()
+    const host = (urlHost || globalThis?.location?.host)?.toLowerCase()
 
     // Warn when the host is invalid.
     if (!host) {
@@ -270,7 +270,7 @@ corresponding host defined.
 
       if (host) {
         // Find the language tag that corresponds to the host.
-        tag = tags.find((t) => langTagsHosts?.[t].toLowerCase() === host)
+        tag = tags.find((t) => langTagsHosts?.[t]?.toLowerCase() === host)
         if (tag) return tag
       }
     }
@@ -284,7 +284,7 @@ corresponding host defined.
     // Language tag url search param key.
     const key = searchParamKey || 'l'
 
-    const path = urlPath || globalThis.location.search
+    const path = urlPath || globalThis?.location?.search
 
     if (path) {
       const url = new URL(`http://localhost${path}`)
@@ -308,7 +308,7 @@ corresponding host defined.
     // Language tag url search param key.
     const key = cookieKey || 'lang_tag'
 
-    const clientCookies = cookies || globalThis.document.cookie
+    const clientCookies = cookies || globalThis?.document?.cookie
 
     if (clientCookies) {
       const langTagCookie = clientCookies
@@ -328,7 +328,7 @@ corresponding host defined.
   // Determine the language tag based on the user's client preferences.
   if (useClientPreferredLangTags) {
     const prefs =
-      clientPreferredLangTags || globalThis.navigator.languages.join(', ')
+      clientPreferredLangTags || globalThis?.navigator?.languages?.join(', ')
     if (prefs) {
       const negotiator = new Negotiator({
         headers: { 'accept-language': prefs },
