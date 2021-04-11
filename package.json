@@ -1,7 +1,7 @@
 {
   "name": "@ejez/wint",
   "version": "0.0.1",
-  "description": "Wint (Web Internationalization), a library to make your web app i18n easier.",
+  "description": "Wint (Web apps Internationalization), a library to make your web app i18n easier.",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "repository": "https://github.com/ejez/wint",
@@ -11,10 +11,17 @@
     "lint": "eslint --ext .js,.ts ./src/"
   },
   "devDependencies": {
+    "@types/negotiator": "^0.6.1",
     "@typescript-eslint/eslint-plugin": "^4.21.0",
     "@typescript-eslint/parser": "^4.21.0",
     "eslint": "^7.23.0",
     "eslint-config-prettier": "^8.1.0",
     "typescript": "^4.2.4"
+  },
+  "engines": {
+    "node": ">= 12.0.0"
+  },
+  "dependencies": {
+    "negotiator": "^0.6.2"
   }
 }
