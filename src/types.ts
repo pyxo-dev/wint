@@ -123,6 +123,10 @@ export interface WintConf {
   urlConf?: WintUrlConf
   /** {@inheritDoc WintCookieConf} */
   cookieConf?: WintCookieConf
-  /** Whether to use the language preferences set in the user's client. */
+  /**
+   * Whether to use the language preferences set in the user's client.
+   *
+   * @defaultValue `false`
+   */
   useClientPreferredLangTags?: boolean
 }

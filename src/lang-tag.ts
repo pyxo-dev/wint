@@ -135,7 +135,11 @@ export interface GetLangTagOptions {
    * ```
    */
   cookies?: string
-  /** {@inheritDoc WintConf.useClientPreferredLangTags} */
+  /**
+   * {@inheritDoc WintConf.useClientPreferredLangTags}
+   *
+   * @defaultValue `false`
+   */
   useClientPreferredLangTags?: boolean
   /**
    * A list of preferred language tags, written using the same syntax of the
