@@ -124,7 +124,7 @@ export interface WintConf {
   langTags: string[]
   /** {@inheritDoc WintLangTagsConf} */
   langTagsConf?: WintLangTagsConf
-  /** {@inheritDoc WinUrlConf} */
+  /** {@inheritDoc WintUrlConf} */
   urlConf?: WintUrlConf
   /** {@inheritDoc WintCookieConf} */
   cookieConf?: WintCookieConf
