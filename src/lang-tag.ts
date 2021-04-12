@@ -8,7 +8,7 @@ export interface GetLangTagOptions {
   /**
    * List of the language tags to choose from.
    *
-   * @see {@link WintConf.langTags}
+   * See {@link WintConf.langTags}
    *
    * @example
    * ```ts
@@ -95,7 +95,7 @@ export interface GetLangTagOptions {
    * An object containing the hosts corresponding to the provided language tags.
    * Needed when the URL structure mode is set to 'host'.
    *
-   * @see {@link WintLangTagConf.host}
+   * See {@link WintLangTagConf.host}
    *
    * @example
    * ```ts
@@ -119,7 +119,7 @@ export interface GetLangTagOptions {
   /**
    * A cookies list, written using the same syntax of the http 'Cookie' header.
    *
-   * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cookie#syntax | 'Cookie' header syntax}
+   * See {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cookie#syntax | 'Cookie' header syntax}
    *
    * @remarks
    *
@@ -145,7 +145,7 @@ export interface GetLangTagOptions {
    * A list of preferred language tags, written using the same syntax of the
    * http 'Accept-Language' header.
    *
-   * @see {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language#syntax | 'Accept-Language' header syntax}
+   * See {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Accept-Language#syntax | 'Accept-Language' header syntax}
    *
    * @remarks
    *

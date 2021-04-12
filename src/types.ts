@@ -60,7 +60,7 @@ export interface WintLangTagConf {
    * The host corresponding to the language tag. Needed when the URL structure
    * mode is set to 'host'.
    *
-   * @see {@link WintUrlConf.mode}
+   * See {@link WintUrlConf.mode}
    *
    * @example Examples
    * ```ts
@@ -106,7 +106,7 @@ export interface WintConf {
   /**
    * List of language tags to use in the app. It is recommended to use `BCP 47`
    * language tags.
-   * @see {@link https://www.w3.org/International/articles/language-tags | Language tags in HTML and XML }
+   * See {@link https://www.w3.org/International/articles/language-tags | Language tags in HTML and XML }
    *
    * The first language tag in the list is considered the default app language
    * tag.
