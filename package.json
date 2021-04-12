@@ -9,7 +9,7 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint --ext .js,.ts ./src/",
-    "test": "jest src/"
+    "test": "jest --coverage src/"
   },
   "devDependencies": {
     "@types/jest": "^26.0.22",
