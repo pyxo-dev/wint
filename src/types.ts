@@ -5,7 +5,7 @@
 /**
  * Configuration related to the structure of the app URLs with regard to
  * internationalization.
- * @alpha
+ * @beta
  */
 export interface WintUrlConf {
   /**
@@ -55,7 +55,7 @@ export interface WintUrlConf {
 
 /**
  * Configuration for a language tag.
- * @alpha
+ * @beta
  */
 export interface WintLangTagConf {
   /**
@@ -78,7 +78,7 @@ export interface WintLangTagConf {
 
 /**
  * App language tags configuration.
- * @alpha
+ * @beta
  */
 export interface WintLangTagsConf {
   [langTag: string]: WintLangTagConf
@@ -86,7 +86,7 @@ export interface WintLangTagsConf {
 
 /**
  * Cookie related configurations.
- * @alpha
+ * @beta
  */
 export interface WintCookieConf {
   /**
@@ -105,7 +105,7 @@ export interface WintCookieConf {
 
 /**
  * Wint configuration.
- * @alpha
+ * @beta
  */
 export interface WintConf {
   /**

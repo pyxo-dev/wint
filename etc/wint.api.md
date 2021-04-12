@@ -4,10 +4,10 @@
 
 ```ts
 
-// @alpha
+// @beta
 export function getLangTag({ langTags, mode, urlHost, urlPath, searchParamKey, langTagsHosts, useCookie, cookieKey, cookies, useClientPreferredLangTags, clientPreferredLangTags, }: GetLangTagOptions): string | undefined;
 
-// @alpha
+// @beta
 export interface GetLangTagOptions {
     clientPreferredLangTags?: string;
     cookieKey?: string;
@@ -24,7 +24,7 @@ export interface GetLangTagOptions {
     useCookie?: boolean;
 }
 
-// @alpha
+// @beta
 export interface WintConf {
     cookieConf?: WintCookieConf;
     langTags: string[];
@@ -33,24 +33,24 @@ export interface WintConf {
     useClientPreferredLangTags?: boolean;
 }
 
-// @alpha
+// @beta
 export interface WintCookieConf {
     cookieKey?: string;
     useCookie?: boolean;
 }
 
-// @alpha
+// @beta
 export interface WintLangTagConf {
     host?: string;
 }
 
-// @alpha
+// @beta
 export interface WintLangTagsConf {
     // (undocumented)
     [langTag: string]: WintLangTagConf;
 }
 
-// @alpha
+// @beta
 export interface WintUrlConf {
     mode?: 'prefix' | 'subdomain' | 'host' | 'search-param' | 'none';
     searchParamKey?: string;
