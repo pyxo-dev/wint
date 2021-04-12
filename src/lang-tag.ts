@@ -1,5 +1,5 @@
 import Negotiator from 'negotiator'
-import type { WintUrlConf } from 'wint'
+import type { WintUrlConf } from './types'
 
 /**
  * Options for `getLangTag` function.
