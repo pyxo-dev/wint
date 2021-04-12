@@ -3,6 +3,7 @@ import type { WintUrlConf } from 'wint'
 
 /**
  * Options for `getLangTag` function.
+ * @alpha
  */
 export interface GetLangTagOptions {
   /**
@@ -167,6 +168,7 @@ export interface GetLangTagOptions {
  * Selects a language tag from a provided list based on a specified URL mode, a
  * cookie, user's client preferences or a fallback to the first language tag in
  * the provided list.
+ * @alpha
  *
  * @remarks
  *
