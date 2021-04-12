@@ -57,6 +57,4 @@ export interface WintUrlConf {
 }
 
 
-// (No @packageDocumentation comment for this package)
-
 ```
