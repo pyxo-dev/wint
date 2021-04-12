@@ -1,4 +1,4 @@
-import { getLangTag } from 'wint'
+import { getLangTag } from '.'
 
 const langTags = ['arb', 'en-GB', 'zh-Hant-HK', 'zh-yue', 'es-419', 'es', 'en']
 const langTagsHosts = {

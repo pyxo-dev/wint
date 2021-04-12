@@ -9,13 +9,7 @@
     "declaration": true,
     "declarationMap": true,
 
-    "baseUrl": ".",
-    "paths": {
-      "wint": ["src"]
-    },
-
-    "outDir": "dist"
+    "outDir": "lib"
   },
-  "include": ["src/**/*"],
-  "exclude": ["src/**/*.spec.ts"]
+  "include": ["src/**/*"]
 }
