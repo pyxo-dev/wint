@@ -5,7 +5,7 @@
 ```ts
 
 // @beta
-export function getLangTag({ langTags, mode, urlHost, urlPath, searchParamKey, langTagsHosts, useCookie, cookieKey, cookies, useClientPreferredLangTags, clientPreferredLangTags, }: GetLangTagOptions): string | undefined;
+export function getLangTag(options: GetLangTagOptions): string | undefined;
 
 // @beta
 export interface GetLangTagOptions {

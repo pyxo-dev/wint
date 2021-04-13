@@ -3,6 +3,7 @@ import type { WintUrlConf } from '.'
 
 /**
  * Options for `getLangTag` function.
+ *
  * @beta
  */
 export interface GetLangTagOptions {
@@ -153,8 +154,12 @@ export interface GetLangTagOptions {
    * When not provided, Wint will try to retrieve the preferences automatically
    * from `globalThis.navigator.languages` (available in a browser environment).
    *
-   * Tip: In a server environment you can get the preferences from the request
-   * object 'Accept-Language' header.
+   * ::: tip
+   *
+   * In a server environment you can get the preferences from the
+   * request object 'Accept-Language' header.
+   *
+   * :::
    *
    * @example
    * ```ts
@@ -168,35 +173,96 @@ export interface GetLangTagOptions {
  * Selects a language tag from a provided list based on a specified URL mode, a
  * cookie, user's client preferences or a fallback to the first language tag in
  * the provided list.
+ *
  * @beta
  *
- * @remarks
+ * @example
  *
- * Note that the use of the the cookie or the client preferences is optional.
+ * When in a browser, or in a server that receives a request from a browser with
+ * the following assumptions:
  *
- * @param getLangTagOptions - Options object.
+ * - The browser URL is `https://es-419.example.com/zh-yue/blog?l=en`
+ *
+ * - The browser Cookies are set to `lang_tag=zh-Hant-HK; lemon_cookie=tasty`
+ *
+ * - The browser language preferences are `en-US;q=0.8, de;q=0.7, es;q=0.5`
+ *
+ *  The function returns the indicated values.
+ *
+ * ```ts
+ * const langTags = [
+ *   'arb',
+ *   'en-GB',
+ *   'zh-Hant-HK',
+ *   'zh-yue',
+ *   'es-419',
+ *   'es',
+ *   'en',
+ * ]
+ *
+ *  console.log(
+ *   getLangTag({ mode: 'prefix', langTags, urlPath: req?.originalUrl }) ===
+ *     'zh-yue',
+ *
+ *    getLangTag({ mode: 'subdomain', langTags, urlHost: req?.get('host') }) ===
+ *     'es-419',
+ *
+ *    getLangTag({
+ *     mode: 'search-param',
+ *     langTags,
+ *     urlPath: req?.originalUrl,
+ *   }) === 'en',
+ *
+ *    getLangTag({
+ *     mode: 'none',
+ *     langTags,
+ *     useCookie: true,
+ *     cookies: req?.get('cookie'),
+ *   }) === 'zh-Hant-HK',
+ *
+ *    getLangTag({
+ *     mode: 'none',
+ *     langTags,
+ *     useClientPreferredLangTags: true,
+ *     clientPreferredLangTags: req?.get('accept-language'),
+ *   }) === 'en'
+ * )
+ *
+ *  const langTagsHosts = {
+ *   arb: 'example-arb.com:3000',
+ *   'en-GB': 'example-en-gb.com:3000',
+ * }
+ *
+ *  // With a URL: 'example-en-gb.com:3000'
+ * console.log(
+ *   getLangTag({
+ *     mode: 'host',
+ *     langTags: ['arb', 'en-GB'],
+ *     langTagsHosts,
+ *     urlHost: req?.get('host'),
+ *   }) === 'en-GB'
+ * )
+ * ```
+ *
+ * @param options - Options object.
  * @returns The chosen language tag, or `undefined` when the provided language
  * tags list is empty or contains an empty string.
- *
- * @example
- * ```ts
- * const langTags = ['ar', 'en-US', 'tr', 'it', 'es']
- * getLangTag({langTags}) // returns 'it' for 'https://example.com/it/blog'
- * ```
  */
-export function getLangTag({
-  langTags,
-  mode,
-  urlHost,
-  urlPath,
-  searchParamKey,
-  langTagsHosts,
-  useCookie,
-  cookieKey,
-  cookies,
-  useClientPreferredLangTags,
-  clientPreferredLangTags,
-}: GetLangTagOptions): string | undefined {
+export function getLangTag(options: GetLangTagOptions): string | undefined {
+  const {
+    langTags,
+    mode,
+    urlHost,
+    urlPath,
+    searchParamKey,
+    langTagsHosts,
+    useCookie,
+    cookieKey,
+    cookies,
+    useClientPreferredLangTags,
+    clientPreferredLangTags,
+  } = options
+
   // Remove duplicates if any.
   const tags = [...new Set(langTags)]
 
