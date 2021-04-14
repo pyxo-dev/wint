@@ -97,6 +97,14 @@ export interface WintLangTagConf {
    * ```
    */
   host?: string
+  /**
+   * The hreflang attribute value to use instead of the language tags.
+   *
+   * @remarks
+   *
+   * Intended to be used when a language tag is not a valid hreflang attribute.
+   */
+  hreflang?: string
 }
 
 /**
