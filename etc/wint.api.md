@@ -25,6 +25,27 @@ export interface GetLangTagOptions {
 }
 
 // @beta
+export function hreflang(options: HreflangOptions): Record<string, HreflangLink> | undefined;
+
+// @beta
+export interface HreflangLink {
+    href: string;
+    hreflang: string;
+    rel: 'alternate';
+}
+
+// @beta
+export interface HreflangOptions {
+    hreflangs?: {
+        [langTag: string]: string;
+    };
+    hrefs: {
+        [langTag: string]: string;
+    };
+    xDefaultLangTag: string;
+}
+
+// @beta
 export interface WintConf {
     cookieConf?: WintCookieConf;
     langTags: string[];
@@ -42,6 +63,7 @@ export interface WintCookieConf {
 // @beta
 export interface WintLangTagConf {
     host?: string;
+    hreflang?: string;
 }
 
 // @beta

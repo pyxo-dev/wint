@@ -1,6 +1,20 @@
+/**
+ * An object representing an hreflang link tag.
+ *
+ * @beta
+ */
 export interface HreflangLink {
-  rel: string
+  /**
+   * The `rel` attribute of the hreflang link.
+   */
+  rel: 'alternate'
+  /**
+   * The `hreflang` attribute of the hreflang link.
+   */
   hreflang: string
+  /**
+   * The `href` attribute of the hreflang link.
+   */
   href: string
 }
 
@@ -37,6 +51,8 @@ export interface HreflangOptions {
 
 /**
  * Builds hreflang link tags ready for consumption by other tools.
+ *
+ * @beta
  *
  * @remarks
  *
