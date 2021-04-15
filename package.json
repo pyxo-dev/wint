@@ -16,7 +16,7 @@
     "ad": "rm -rf ./docs/src/api/ && api-documenter markdown -i temp/ -o docs/src/api",
     "docs:dev": "vuepress dev docs/src",
     "docs:build": "rm -rf docs/dist/ && vuepress build docs/src",
-    "build": "yarn test && yarn tsc && yarn ae && yarn ad && yarn docs:build"
+    "build": "yarn tsc && yarn ae && yarn ad && yarn docs:build && yarn test"
   },
   "files": ["/lib", "/dist"],
   "devDependencies": {

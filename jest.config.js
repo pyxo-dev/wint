@@ -4,4 +4,5 @@ module.exports = {
   moduleNameMapper: {
     '^wint$': '<rootDir>/src',
   },
+  coverageDirectory: '<rootDir>/docs/dist/coverage',
 }
