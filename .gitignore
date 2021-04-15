@@ -18,5 +18,6 @@ yarn-error.log*
 /temp/
 /etc/*.api.html
 
+/docs/dist
 /docs/src/api
 /docs/src/.vuepress
