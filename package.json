@@ -10,8 +10,8 @@
   "scripts": {
     "lint": "eslint --ext .js,.ts ./src/",
     "test": "jest --coverage src/",
-    "docs:dev": "vuepress dev docs/api",
-    "docs:build": "vuepress build docs/api"
+    "docs:dev": "vuepress dev docs/src",
+    "docs:build": "vuepress build docs/src"
   },
   "devDependencies": {
     "@types/jest": "^26.0.22",
