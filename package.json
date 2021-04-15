@@ -1,10 +1,10 @@
 {
-  "name": "@ejez/wint",
+  "name": "@pyxo/wint",
   "version": "0.0.1",
   "description": "Wint (Web apps Internationalization), a library to make your web app i18n easier.",
   "main": "lib/index.js",
   "typings": "dist/wint.d.ts",
-  "repository": "https://github.com/ejez/wint",
+  "repository": "https://github.com/pyxo-dev/wint",
   "author": "Ejez <ejez@protonmail.ch>",
   "license": "MIT",
   "scripts": {
