@@ -18,6 +18,7 @@
     "docs:build": "rm -rf docs/dist/ && vuepress build docs/src",
     "build": "yarn test && yarn tsc && yarn ae && yarn ad && yarn docs:build"
   },
+  "files": ["/lib", "/dist"],
   "devDependencies": {
     "@microsoft/api-documenter": "^7.12.22",
     "@microsoft/api-extractor": "^7.13.5",
