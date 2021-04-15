@@ -54,7 +54,11 @@ export interface GetLangTagOptions {
    * When not provided, Wint will try to retrieve it automatically from
    * `globalThis.location` (available in a browser environment).
    *
-   * Tip: In a server environment you can get the host from the request object.
+   * ::: tip
+   *
+   * In a server environment you can get the host from the request object.
+   *
+   * :::
    *
    * @example
    * ```ts
@@ -72,7 +76,11 @@ export interface GetLangTagOptions {
    * When not provided, Wint will try to retrieve it automatically from
    * `globalThis.location` (available in a browser environment).
    *
-   * Tip: In a server environment you can get the path from the request object.
+   * ::: tip
+   *
+   * In a server environment you can get the path from the request object.
+   *
+   * :::
    *
    * @example
    * ```ts
@@ -128,8 +136,12 @@ export interface GetLangTagOptions {
    * When not provided, Wint will try to retrieve the cookies automatically
    * from `globalThis.document.cookie` (available in a browser environment).
    *
-   * Tip: In a server environment you can get the cookies from the request
-   * object 'Cookie' header.
+   * ::: tip
+   *
+   * In a server environment you can get the cookies from the request object
+   * 'Cookie' header.
+   *
+   * :::
    *
    * @example
    * ```ts
