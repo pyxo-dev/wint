@@ -8,6 +8,15 @@
 export function getLangTag(options: GetLangTagOptions): string | undefined;
 
 // @beta
+export function getLangTagCookie(options?: GetLangTagCookieOptions): string | undefined;
+
+// @beta
+export interface GetLangTagCookieOptions {
+    cookieKey?: string;
+    cookies?: string;
+}
+
+// @beta
 export interface GetLangTagOptions {
     clientPreferredLangTags?: string;
     cookieKey?: string;
