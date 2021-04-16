@@ -122,13 +122,13 @@ export interface GetLangTagOptions {
    */
   useCookie?: boolean
   /**
-   * {@inheritDoc WintCookieConf.cookieKey}
+   * {@inheritDoc GetLangTagCookieOptions.cookieKey}
    *
    * @defaultValue 'lang_tag'
    */
   cookieKey?: string
   /**
-   * {@inheritDoc GetLangTagOptions.cookieKey}
+   * {@inheritDoc GetLangTagCookieOptions.cookies}
    *
    * @example
    * ```ts
