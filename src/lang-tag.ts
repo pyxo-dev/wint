@@ -1,5 +1,6 @@
 import Negotiator from 'negotiator'
 import type { WintUrlConf } from '.'
+import { getLangTagCookie } from '.'
 
 /**
  * Options for `getLangTag` function.
@@ -127,21 +128,7 @@ export interface GetLangTagOptions {
    */
   cookieKey?: string
   /**
-   * A cookies list, written using the same syntax of the http 'Cookie' header.
-   *
-   * See {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cookie#syntax | 'Cookie' header syntax}
-   *
-   * @remarks
-   *
-   * When not provided, Wint will try to retrieve the cookies automatically
-   * from `globalThis.document.cookie` (available in a browser environment).
-   *
-   * ::: tip
-   *
-   * In a server environment you can get the cookies from the request object
-   * 'Cookie' header.
-   *
-   * :::
+   * {@inheritDoc GetLangTagOptions.cookieKey}
    *
    * @example
    * ```ts
@@ -385,23 +372,12 @@ corresponding host defined.
 
   // Determine the language tag based on a cookie.
   if (useCookie) {
-    // Language tag url search param key.
-    const key = cookieKey || 'lang_tag'
+    const langTagCookie = getLangTagCookie({ cookieKey, cookies })
 
-    const clientCookies = cookies || globalThis?.document?.cookie
-
-    if (clientCookies) {
-      const langTagCookie = clientCookies
-        .split(';')
-        .find((c) => c.includes(`${key}=`))
-        ?.split('=')[1]
-        .trim()
-
-      if (langTagCookie) {
-        // Find the language tag that corresponds to the stored cookie.
-        tag = tags.find((t) => t === langTagCookie)
-        if (tag) return tag
-      }
+    if (langTagCookie) {
+      // Find the language tag that corresponds to the stored cookie.
+      tag = tags.find((t) => t === langTagCookie)
+      if (tag) return tag
     }
   }
 

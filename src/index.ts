@@ -4,6 +4,7 @@
  * @packageDocumentation
  */
 
+export * from './helpers'
 export * from './lang-tag'
 export * from './meta'
 export * from './types'
