@@ -4,6 +4,9 @@
 
 ```ts
 
+import type { CookieSerializeOptions } from 'cookie';
+import type { ServerResponse } from 'http';
+
 // @beta
 export function getLangTag(options: GetLangTagOptions): string | undefined;
 
@@ -55,6 +58,17 @@ export interface HreflangOptions {
 }
 
 // @beta
+export function setLangTagCookie(options: SetLangTagCookieOptions): string | undefined;
+
+// @beta
+export interface SetLangTagCookieOptions {
+    cookieKey?: string;
+    cookieOptions?: CookieSerializeOptions;
+    langTag: string;
+    serverResponse?: ServerResponse;
+}
+
+// @beta
 export interface WintConf {
     cookieConf?: WintCookieConf;
     langTags: string[];
@@ -66,6 +80,7 @@ export interface WintConf {
 // @beta
 export interface WintCookieConf {
     cookieKey?: string;
+    cookieOptions?: CookieSerializeOptions;
     useCookie?: boolean;
 }
 

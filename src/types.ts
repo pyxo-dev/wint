@@ -1,3 +1,5 @@
+import type { CookieSerializeOptions } from 'cookie';
+
 /**
  * Miscellaneous types used by Wint.
  */
@@ -142,6 +144,21 @@ export interface WintCookieConf {
    * @defaultValue `lang_tag`
    */
   cookieKey?: string
+  /**
+   * An object containing the options to use for the language tag cookie.
+   *
+   * @remarks
+   *
+   * The options are serialized using the `cookie` package.
+   *
+   * See {@link https://github.com/jshttp/cookie/#options-1 | Cookie serialize options}
+   *
+   * @example
+   * ```ts
+   * cookieOptions: { sameSite: 'lax', maxAge: 60*60*24 }
+   * ```
+   */
+  cookieOptions?: CookieSerializeOptions
 }
 
 /**
