@@ -5,6 +5,6 @@
  */
 
 export * from './helpers'
+export * from './hreflang'
 export * from './lang-tag'
-export * from './meta'
 export * from './types'

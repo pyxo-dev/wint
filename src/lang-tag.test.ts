@@ -24,13 +24,17 @@ test('[getLangTag] prefix mode: with a matching prefix, should return the corres
 })
 
 test('[getLangTag] subdomain mode: without a matching subdomain, should fallback to the first lang tag.', () => {
-  expect(getLangTag({ langTags, mode: 'subdomain' })).toBe('arb')
-  getLangTag({ langTags, mode: 'subdomain', urlHost: 'it.example.com' })
+  expect(getLangTag({ langTags, urlMode: 'subdomain' })).toBe('arb')
+  getLangTag({ langTags, urlMode: 'subdomain', urlHost: 'it.example.com' })
 })
 
 test('[getLangTag] subdomain mode: with a matching subdomain, should return the corresponding lang tag.', () => {
   expect(
-    getLangTag({ langTags, mode: 'subdomain', urlHost: 'es-419.example.com' })
+    getLangTag({
+      langTags,
+      urlMode: 'subdomain',
+      urlHost: 'es-419.example.com',
+    })
   ).toBe('es-419')
 })
 
@@ -38,7 +42,7 @@ test('[getLangTag] host mode: without a matching host, should fallback to the fi
   expect(
     getLangTag({
       langTags,
-      mode: 'host',
+      urlMode: 'host',
       langTagsHosts,
     })
   ).toBe('arb')
@@ -46,7 +50,7 @@ test('[getLangTag] host mode: without a matching host, should fallback to the fi
   expect(
     getLangTag({
       langTags,
-      mode: 'host',
+      urlMode: 'host',
       langTagsHosts,
       urlHost: 'example.com',
     })
@@ -57,7 +61,7 @@ test('[getLangTag] host mode: with a matching host, should return the correspond
   expect(
     getLangTag({
       langTags,
-      mode: 'host',
+      urlMode: 'host',
       langTagsHosts,
       urlHost: 'en-example.com',
     })
@@ -65,20 +69,20 @@ test('[getLangTag] host mode: with a matching host, should return the correspond
 })
 
 test('[getLangTag] search-param mode: without a matching search param, should fallback to the first lang tag.', () => {
-  expect(getLangTag({ langTags, mode: 'search-param' })).toBe('arb')
+  expect(getLangTag({ langTags, urlMode: 'search-param' })).toBe('arb')
 
   expect(
-    getLangTag({ langTags, mode: 'search-param', urlPath: '/blog?l=it' })
+    getLangTag({ langTags, urlMode: 'search-param', urlPath: '/blog?l=it' })
   ).toBe('arb')
 
   expect(
-    getLangTag({ langTags, mode: 'search-param', urlPath: '/blog?lg=it' })
+    getLangTag({ langTags, urlMode: 'search-param', urlPath: '/blog?lg=it' })
   ).toBe('arb')
 })
 
 test('[getLangTag] search-param mode: with a matching search param, should return the corresponding lang tag.', () => {
   expect(
-    getLangTag({ langTags, mode: 'search-param', urlPath: '/blog?l=en' })
+    getLangTag({ langTags, urlMode: 'search-param', urlPath: '/blog?l=en' })
   ).toBe('en')
 })
 
@@ -86,7 +90,7 @@ test('[getLangTag] cookie enabled: without a matching cookie, should fallback to
   expect(
     getLangTag({
       langTags,
-      mode: 'none',
+      urlMode: 'none',
       useCookie: true,
     })
   ).toBe('arb')
@@ -94,7 +98,7 @@ test('[getLangTag] cookie enabled: without a matching cookie, should fallback to
   expect(
     getLangTag({
       langTags,
-      mode: 'none',
+      urlMode: 'none',
       useCookie: true,
       cookies: 'strawberry_cookie=tasty',
     })
@@ -103,7 +107,7 @@ test('[getLangTag] cookie enabled: without a matching cookie, should fallback to
   expect(
     getLangTag({
       langTags,
-      mode: 'none',
+      urlMode: 'none',
       useCookie: true,
       cookies: 'lang_tag=it; strawberry_cookie=tasty',
     })
@@ -114,7 +118,7 @@ test('[getLangTag] cookie enabled: with a matching cookie, should return the cor
   expect(
     getLangTag({
       langTags,
-      mode: 'none',
+      urlMode: 'none',
       useCookie: true,
       cookies: 'lang_tag=zh-Hant-HK; strawberry_cookie=tasty',
     })
@@ -125,7 +129,7 @@ test('[getLangTag] client preferred lang tags enabled: without a matching prefer
   expect(
     getLangTag({
       langTags,
-      mode: 'none',
+      urlMode: 'none',
       useClientPreferredLangTags: true,
     })
   ).toBe('arb')
@@ -133,7 +137,7 @@ test('[getLangTag] client preferred lang tags enabled: without a matching prefer
   expect(
     getLangTag({
       langTags,
-      mode: 'none',
+      urlMode: 'none',
       useClientPreferredLangTags: true,
       clientPreferredLangTags: 'it-US;q=0.8, de;q=0.7',
     })
@@ -144,7 +148,7 @@ test('[getLangTag] client preferred lang tags enabled: with a matching preferenc
   expect(
     getLangTag({
       langTags,
-      mode: 'none',
+      urlMode: 'none',
       useClientPreferredLangTags: true,
       clientPreferredLangTags: 'en-US;q=0.8, de;q=0.7, es;q=0.5',
     })

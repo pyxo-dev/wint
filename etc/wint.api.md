@@ -28,12 +28,27 @@ export interface GetLangTagOptions {
     langTagsHosts?: {
         [langTag: string]: string;
     };
-    mode?: WintUrlConf['mode'];
     searchParamKey?: string;
     urlHost?: string;
+    urlMode?: WintUrlConf['mode'];
     urlPath?: string;
     useClientPreferredLangTags?: boolean;
     useCookie?: boolean;
+}
+
+// @beta
+export function getPathHref(options: GetPathHrefOptions): string | undefined;
+
+// @beta
+export interface GetPathHrefOptions {
+    domain?: string;
+    langTag: string;
+    langTagHost?: string;
+    searchParamKey?: string;
+    urlHost?: string;
+    urlMode?: WintUrlConf['mode'];
+    urlPath: string;
+    urlProtocol?: string;
 }
 
 // @beta
@@ -54,6 +69,28 @@ export interface HreflangOptions {
     hrefs: {
         [langTag: string]: string;
     };
+    xDefaultLangTag: string;
+}
+
+// @beta
+export function hreflangPaths(options: HreflangPathsOptions): Record<string, HreflangLink> | undefined;
+
+// @beta
+export interface HreflangPathsOptions {
+    domain?: string;
+    hreflangs?: {
+        [langTag: string]: string;
+    };
+    langTagsHosts?: {
+        [langTag: string]: string;
+    };
+    searchParamKey?: string;
+    urlHost?: string;
+    urlMode?: WintUrlConf['mode'];
+    urlPaths: {
+        [langTag: string]: string;
+    };
+    urlProtocol?: string;
     xDefaultLangTag: string;
 }
 

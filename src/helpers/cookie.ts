@@ -22,7 +22,7 @@ export interface GetLangTagCookieOptions {
    * @remarks
    *
    * When not provided, Wint will try to retrieve the cookies automatically
-   * from `globalThis.document.cookie` (available in a browser environment).
+   * from `globalThis.document.cookie` (available in a `dom` environment).
    *
    * ::: tip
    *

@@ -24,28 +24,37 @@ export interface GetLangTagOptions {
    *
    * @defaultValue 'prefix'
    *
-   * @example Examples
+   * @example
    *
-   * 'prefix' mode:
-   * 'example.com/es', 'example.com/en-GB'
+   * Examples URLs in different modes.
    *
-   * 'subdomain' mode:
-   * 'es.example.com', 'en-GB.example.com'
+   * <h4>Prefix mode</h4>
    *
-   * 'host' mode:
+   * `example.com/es`, `example.com/en-GB`
+   *
+   * <h4>Subdomain mode</h4>
+   *
+   * `es.example.com`, `en-GB.example.com`
+   *
+   * <h4>Host mode</h4>
+   *
    * Each language tag has its own host.
    *
-   * 'example.es', 'example.co.uk'
-   * 'my-spanish-site.com', 'my-english-site.com'
-   * 'localhost:8000' (for spanish), 'localhost:8001' (for english)
+   * `example.es`, `example.co.uk`
    *
-   * 'search-param' mode:
-   * 'example.com?lang=es', 'example.com?lang=en-GB'
+   * `my-spanish-site.com`, `my-english-site.com`
    *
-   * 'none' mode:
-   * 'example.com' (the same URL used for all language tags)
+   * `localhost:8000` (for spanish), `localhost:8001` (for english)
+   *
+   * <h4>Search param mode</h4>
+   *
+   * `example.com?lang=es`, `example.com?lang=en-GB`
+   *
+   * <h4>None mode</h4>
+   *
+   * `example.com` (the same URL used for all language tags)
    */
-  mode?: WintUrlConf['mode']
+  urlMode?: WintUrlConf['mode']
   /**
    * The URL host (including the port if any) to use when determining the
    * language tag in 'subdomain' and 'host' modes.
@@ -53,7 +62,7 @@ export interface GetLangTagOptions {
    * @remarks
    *
    * When not provided, Wint will try to retrieve it automatically from
-   * `globalThis.location` (available in a browser environment).
+   * `globalThis.location` (available in a `dom` environment).
    *
    * ::: tip
    *
@@ -75,7 +84,7 @@ export interface GetLangTagOptions {
    * @remarks
    *
    * When not provided, Wint will try to retrieve it automatically from
-   * `globalThis.location` (available in a browser environment).
+   * `globalThis.location` (available in a `dom` environment).
    *
    * ::: tip
    *
@@ -151,7 +160,7 @@ export interface GetLangTagOptions {
    * @remarks
    *
    * When not provided, Wint will try to retrieve the preferences automatically
-   * from `globalThis.navigator.languages` (available in a browser environment).
+   * from `globalThis.navigator.languages` (available in a `dom` environment).
    *
    * ::: tip
    *
@@ -250,7 +259,7 @@ export interface GetLangTagOptions {
 export function getLangTag(options: GetLangTagOptions): string | undefined {
   const {
     langTags,
-    mode,
+    urlMode,
     urlHost,
     urlPath,
     searchParamKey,
@@ -274,16 +283,28 @@ string.
     return
   }
 
+  // Correctly type needed `globalThis` properties.
+  // `location` and `navigator` objects might be undefined in a non `dom`
+  // environment, the following will add `undefined` to their types.
+  const location = <Location | undefined>globalThis?.location
+  const navigator = <Navigator | undefined>globalThis?.navigator
+  // Note: `globalThis` requires node >=12.0.0
+
   // Will hold the return value if any.
   let tag: string | undefined
+
+  // The URL mode defaults to 'prefix'.
+  const mode =
+    urlMode && ['subdomain', 'host', 'search-param', 'none'].includes(urlMode)
+      ? urlMode
+      : 'prefix'
 
   /////////////////////////////////////////////////////////////////////////////
   //                              'prefix' mode                              //
   /////////////////////////////////////////////////////////////////////////////
 
-  if (mode === 'prefix' || mode === void 0) {
-    // Note: `globalThis` requires node >=12.0.0
-    const prefixLangTag = (urlPath || globalThis?.location?.pathname)
+  if (mode === 'prefix') {
+    const prefixLangTag = (urlPath || location?.pathname)
       ?.split('/')[1]
       .toLowerCase()
 
@@ -299,12 +320,12 @@ string.
   /////////////////////////////////////////////////////////////////////////////
 
   if (mode === 'subdomain' || mode === 'host') {
-    const host = (urlHost || globalThis?.location?.host)?.toLowerCase()
+    const host = (urlHost || location?.host)?.toLowerCase()
 
     // Warn when the host is invalid.
     if (!host) {
       console.warn(`
-[Wint getLangTag] "subdomain|host" mode: The URL host is empty or undefined.
+[Wint getLangTag] "${mode}" mode: The URL host is empty or undefined.
 `)
     }
 
@@ -329,7 +350,7 @@ string.
       for (const t of tags) {
         if (!langTagsHosts?.[t]) {
           console.warn(`
-[Wint getLangTag] "host" mode: The language tag "${t}" does not have a
+[Wint getLangTag] "${mode}" mode: The language tag "${t}" does not have a
 corresponding host defined.
 `)
         }
@@ -351,7 +372,7 @@ corresponding host defined.
     // Language tag url search param key.
     const key = searchParamKey || 'l'
 
-    const path = urlPath || globalThis?.location?.search
+    const path = urlPath || location?.search
 
     if (path) {
       const url = new URL(`http://localhost${path}`)
@@ -383,8 +404,7 @@ corresponding host defined.
 
   // Determine the language tag based on the user's client preferences.
   if (useClientPreferredLangTags) {
-    const prefs =
-      clientPreferredLangTags || globalThis?.navigator?.languages?.join(', ')
+    const prefs = clientPreferredLangTags || navigator?.languages?.join(', ')
     if (prefs) {
       const negotiator = new Negotiator({
         headers: { 'accept-language': prefs },

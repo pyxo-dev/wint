@@ -1,4 +1,4 @@
-import { hreflang } from '.'
+import { hreflang, hreflangPaths } from '.'
 
 const hrefs = {
   arb: 'https://example.com/arb',
@@ -29,6 +29,9 @@ const expectedHreflangLinks = {
   },
 }
 
+/**
+ * hreflang function.
+ */
 test('[hreflang] invalid input: with empty xDefaultLangTag, should return `undefined`', () => {
   expect(hreflang({ hrefs, xDefaultLangTag: '' })).toBeUndefined()
 })
@@ -56,4 +59,47 @@ test('[hreflang] with `hreflangs` provided, should use them in place of langTags
   expect(
     hreflang({ hrefs, xDefaultLangTag, hreflangs: { arb: 'ar' } })
   ).toStrictEqual(newExpectedLinks)
+})
+
+/**
+ * hreflangPaths function.
+ */
+test(`[hreflangPaths] With valid input, should return an object.`, () => {
+  const urlPaths = { es: '/blog/reciente', en: '/blog/recent' }
+  const xDefaultLangTag = 'es'
+  expect(
+    hreflangPaths({
+      urlPaths,
+      xDefaultLangTag,
+      urlProtocol: 'http',
+      urlHost: 'example.com',
+    })
+  ).toStrictEqual({
+    'hreflang-en': {
+      href: 'http://example.com/en/blog/recent',
+      hreflang: 'en',
+      rel: 'alternate',
+    },
+    'hreflang-es': {
+      href: 'http://example.com/es/blog/reciente',
+      hreflang: 'es',
+      rel: 'alternate',
+    },
+    'hreflang-x-default': {
+      href: 'http://example.com/es/blog/reciente',
+      hreflang: 'x-default',
+      rel: 'alternate',
+    },
+  })
+})
+
+test(`[hreflangPaths] With invalid input, should return undefined.`, () => {
+  const urlPaths = { es: '/blog/reciente', en: '/blog/recent' }
+  const xDefaultLangTag = 'es'
+  expect(
+    hreflangPaths({
+      urlPaths,
+      xDefaultLangTag,
+    })
+  ).toBeUndefined()
 })

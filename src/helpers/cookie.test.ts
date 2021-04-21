@@ -40,7 +40,6 @@ environment, should return undefined.`, () => {
 
 test(`[setLangTagCookie] With a serverResponse provided, should set the cookie.`, () => {
   const res = httpMocks.createResponse()
-
   expect(
     setLangTagCookie({
       langTag: 'ar',
