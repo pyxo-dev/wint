@@ -1,12 +1,12 @@
 # Table of Contents
 
-1.  [Introduction](#org1e4820d)
-2.  [Installation](#orgad39fb2)
-3.  [Features](#orge38610c)
-4.  [Documentation](#org1aa7bb1)
-5.  [Source code](#orgfbdedaa)
+1.  [Introduction](#orgd5d70e7)
+2.  [Installation](#org4a8c8f6)
+3.  [Features](#org245baef)
+4.  [Documentation](#org1dab5e0)
+5.  [Source code](#org4006feb)
 
-<a id="org1e4820d"></a>
+<a id="orgd5d70e7"></a>
 
 # Introduction
 
@@ -16,16 +16,15 @@ facilitate the i18n of web apps.
 Wint uses the term `language tag` to denote a language or a locale, and
 recommends the use of [BCP 47](https://www.w3.org/International/articles/language-tags) language tags.
 
-<a id="orgad39fb2"></a>
+<a id="org4a8c8f6"></a>
 
 # Installation
 
-\#+begin<sub>src</sub> sh
-npm install @pyxo/wint
+    npm install @pyxo/wint
+    # or
+    yarn add @pyxo/wint
 
-yarn add @pyxo/wint #+end<sub>src</sub>
-
-<a id="orge38610c"></a>
+<a id="org245baef"></a>
 
 # Features
 
@@ -39,13 +38,13 @@ yarn add @pyxo/wint #+end<sub>src</sub>
   settings).
 - Support for `hreflang` link tags.
 
-<a id="org1aa7bb1"></a>
+<a id="org1dab5e0"></a>
 
 # Documentation
 
 API docs: [wint.pyxo.net/api](https://wint.pyxo.net/api)
 
-<a id="orgfbdedaa"></a>
+<a id="org4006feb"></a>
 
 # Source code
 

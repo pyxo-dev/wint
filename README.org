@@ -11,7 +11,8 @@ recommends the use of [[https://www.w3.org/International/articles/language-tags]
 #+begin_src sh
 npm install @pyxo/wint
 # or
-yarn add @pyxo/wint #+end_src
+yarn add @pyxo/wint
+#+end_src
 
 * Features
 - Can be used in a client environment (browser), server environment (node) or

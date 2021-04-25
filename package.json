@@ -1,6 +1,6 @@
 {
   "name": "@pyxo/wint",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "description": "Wint (Web apps Internationalization), a library to make your web app i18n easier.",
   "publishConfig": {
     "access": "public"
