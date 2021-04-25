@@ -29,7 +29,7 @@ test('[getLangTagCookie] With `cookieKey` provided.', () => {
 /**
  * setLangTagCookie function.
  */
-test(`[setLangTagCookie] With an empty langTag, should return undefined.`, () => {
+test('[setLangTagCookie] With an empty langTag, should return undefined.', () => {
   expect(setLangTagCookie({ langTag: '' })).toBeUndefined()
 })
 
@@ -38,7 +38,7 @@ environment, should return undefined.`, () => {
   expect(setLangTagCookie({ langTag: 'en' })).toBeUndefined()
 })
 
-test(`[setLangTagCookie] With a serverResponse provided, should set the cookie.`, () => {
+test('[setLangTagCookie] With a serverResponse provided, should set the cookie.', () => {
   const res = httpMocks.createResponse()
   expect(
     setLangTagCookie({
@@ -51,7 +51,7 @@ test(`[setLangTagCookie] With a serverResponse provided, should set the cookie.`
   expect(res.getHeader('Set-Cookie')).toBe('lang_tag=ar; SameSite=Lax')
 })
 
-test(`[setLangTagCookie] In a dom environment, should set the cookie.`, () => {
+test('[setLangTagCookie] In a dom environment, should set the cookie.', () => {
   const dom = new JSDOM()
   globalThis.document = dom.window.document
 

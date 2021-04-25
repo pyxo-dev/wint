@@ -177,19 +177,41 @@ export function getPathHref(options: GetPathHrefOptions): string | undefined {
 
   const host = urlHost || location?.host
   // Validate the host for the modes that need it.
-  if (!host && ['prefix', 'search-param', 'none'].includes(mode)) {
-    console.error(`
+  if (['prefix', 'search-param', 'none'].includes(mode)) {
+    if (!host) {
+      console.error(`
 [Wint getPathHref] "${mode}" mode: No URL host provided and not in a dom
 environment.
 `)
-    return
+      return
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    //                             'prefix' mode                             //
+    ///////////////////////////////////////////////////////////////////////////
+
+    if (mode === 'prefix') return `${protocol}://${host}/${langTag}${urlPath}`
+
+    ///////////////////////////////////////////////////////////////////////////
+    //                          'search-param' mode                          //
+    ///////////////////////////////////////////////////////////////////////////
+
+    if (mode === 'search-param') {
+      // Language tag url search param key.
+      const key = searchParamKey || 'l'
+
+      const url = new URL(`${protocol}://${host}${urlPath}`)
+      url.searchParams.set(key, langTag)
+
+      return url.href
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    //                              'none' mode                              //
+    ///////////////////////////////////////////////////////////////////////////
+
+    if (mode === 'none') return `${protocol}://${host}${urlPath}`
   }
-
-  /////////////////////////////////////////////////////////////////////////////
-  //                              'prefix' mode                              //
-  /////////////////////////////////////////////////////////////////////////////
-
-  if (mode === 'prefix') return `${protocol}://${host}/${langTag}${urlPath}`
 
   /////////////////////////////////////////////////////////////////////////////
   //                             'subdomain' mode                            //
@@ -220,24 +242,4 @@ environment.
     }
     return `${protocol}://${langTagHost}${urlPath}`
   }
-
-  /////////////////////////////////////////////////////////////////////////////
-  //                           'search-param' mode                           //
-  /////////////////////////////////////////////////////////////////////////////
-
-  if (mode === 'search-param') {
-    // Language tag url search param key.
-    const key = searchParamKey || 'l'
-
-    const url = new URL(`${protocol}://${host}${urlPath}`)
-    url.searchParams.set(key, langTag)
-
-    return url.href
-  }
-
-  /////////////////////////////////////////////////////////////////////////////
-  //                               'none' mode                               //
-  /////////////////////////////////////////////////////////////////////////////
-
-  return `${protocol}://${host}${urlPath}`
 }

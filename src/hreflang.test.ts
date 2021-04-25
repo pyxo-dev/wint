@@ -64,7 +64,7 @@ test('[hreflang] with `hreflangs` provided, should use them in place of langTags
 /**
  * hreflangPaths function.
  */
-test(`[hreflangPaths] With valid input, should return an object.`, () => {
+test('[hreflangPaths] With valid input, should return an object.', () => {
   const urlPaths = { es: '/blog/reciente', en: '/blog/recent' }
   const xDefaultLangTag = 'es'
   expect(
@@ -93,7 +93,7 @@ test(`[hreflangPaths] With valid input, should return an object.`, () => {
   })
 })
 
-test(`[hreflangPaths] With invalid input, should return undefined.`, () => {
+test('[hreflangPaths] With invalid input, should return undefined.', () => {
   const urlPaths = { es: '/blog/reciente', en: '/blog/recent' }
   const xDefaultLangTag = 'es'
   expect(

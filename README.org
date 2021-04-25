@@ -1,11 +1,8 @@
-#+EXPORT_FILE_NAME: docs/src/index
+#+OPTIONS: toc:nil
 
 * Introduction
-Wint (<u>W</u>eb apps <u>int</u>ernationalization) is a javascript library to
-facilitate the i18n of web apps.
-
-Wint uses the term =language tag= to denote a language or a locale, and
-recommends the use of [[https://www.w3.org/International/articles/language-tags][BCP 47]] language tags.
+Wint (*W*​eb apps *int*​ernationalization) is a javascript library to facilitate
+the i18n of web apps.
 
 * Installation
 #+begin_src sh
@@ -24,6 +21,8 @@ yarn add @pyxo/wint
 - Can make use of the user's client language preferences (e.g. browser
   settings).
 - Support for =hreflang= link tags.
+- Language tags, Wint uses the term "language tag" to denote a language or a
+  locale, and recommends the use of [[https://www.w3.org/International/articles/language-tags][BCP 47]] language tags.
 
 * Documentation
 API docs: [[https://wint.pyxo.net/api][wint.pyxo.net/api]]
