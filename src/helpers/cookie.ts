@@ -58,9 +58,9 @@ export function getLangTagCookie(
 
   // The `document` object might be undefined in a non `dom` environment, the
   // following will add `undefined` to its type.
-  const document = <Document | undefined>globalThis?.document
+  const document = <Document | undefined>globalThis.document
 
-  // If cookies are not provided, try to retrieve them (when in a browser env).
+  // If cookies are not provided, try to retrieve them (when in a `dom` env).
   const cookie_str = cookies || document?.cookie
 
   // After parsing the cookie string, we return the language tag cookie.
@@ -127,7 +127,7 @@ export function setLangTagCookie(
 
   // The `document` object might be undefined in a non `dom` environment, the
   // following will add `undefined` to its type.
-  const document = <Document | undefined>globalThis?.document
+  const document = <Document | undefined>globalThis.document
 
   // Check that either the response object is provided, or the 'document' object
   // exists.

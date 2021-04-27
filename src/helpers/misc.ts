@@ -158,7 +158,7 @@ export function getPathHref(options: GetPathHrefOptions): string | undefined {
 
   // The `location` object might be undefined in a non `dom` environment, the
   // following will add `undefined` to its type.
-  const location = <Location | undefined>globalThis?.location
+  const location = <Location | undefined>globalThis.location
 
   const protocol = urlProtocol || location?.protocol?.replace(':', '')
   // Validate the protocol.
@@ -210,7 +210,7 @@ environment.
     //                              'none' mode                              //
     ///////////////////////////////////////////////////////////////////////////
 
-    if (mode === 'none') return `${protocol}://${host}${urlPath}`
+    return `${protocol}://${host}${urlPath}`
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -232,14 +232,12 @@ environment.
   //                               'host' mode                               //
   /////////////////////////////////////////////////////////////////////////////
 
-  if (mode === 'host') {
-    // Validate the language tag host.
-    if (!langTagHost) {
-      console.error(`
+  // Validate the language tag host.
+  if (!langTagHost) {
+    console.error(`
 [Wint getPathHref] "${mode}" mode: The provided language tag host is not valid.
 `)
-      return
-    }
-    return `${protocol}://${langTagHost}${urlPath}`
+    return
   }
+  return `${protocol}://${langTagHost}${urlPath}`
 }

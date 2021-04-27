@@ -1,4 +1,3 @@
-import { JSDOM } from 'jsdom'
 import httpMocks from 'node-mocks-http'
 import { getLangTagCookie, setLangTagCookie } from '.'
 
@@ -49,19 +48,4 @@ test('[setLangTagCookie] With a serverResponse provided, should set the cookie.'
   ).toBe('lang_tag=ar; SameSite=Lax')
 
   expect(res.getHeader('Set-Cookie')).toBe('lang_tag=ar; SameSite=Lax')
-})
-
-test('[setLangTagCookie] In a dom environment, should set the cookie.', () => {
-  const dom = new JSDOM()
-  globalThis.document = dom.window.document
-
-  expect(
-    setLangTagCookie({
-      langTag: 'en-GB',
-      cookieKey: 'lt',
-      cookieOptions: { maxAge: 60 },
-    })
-  ).toBe('lt=en-GB; Max-Age=60')
-
-  expect(globalThis.document.cookie).toBe('lt=en-GB')
 })

@@ -25,7 +25,9 @@ test('[getLangTag] prefix mode: with a matching prefix, should return the corres
 
 test('[getLangTag] subdomain mode: without a matching subdomain, should fallback to the first lang tag.', () => {
   expect(getLangTag({ langTags, urlMode: 'subdomain' })).toBe('arb')
-  getLangTag({ langTags, urlMode: 'subdomain', urlHost: 'it.example.com' })
+  expect(
+    getLangTag({ langTags, urlMode: 'subdomain', urlHost: 'it.example.com' })
+  ).toBe('arb')
 })
 
 test('[getLangTag] subdomain mode: with a matching subdomain, should return the corresponding lang tag.', () => {
@@ -39,6 +41,14 @@ test('[getLangTag] subdomain mode: with a matching subdomain, should return the 
 })
 
 test('[getLangTag] host mode: without a matching host, should fallback to the first lang tag.', () => {
+  expect(
+    getLangTag({
+      langTags,
+      urlMode: 'host',
+      urlHost: 'example.com',
+    })
+  ).toBe('arb')
+
   expect(
     getLangTag({
       langTags,

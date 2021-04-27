@@ -286,8 +286,8 @@ string.
   // Correctly type needed `globalThis` properties.
   // `location` and `navigator` objects might be undefined in a non `dom`
   // environment, the following will add `undefined` to their types.
-  const location = <Location | undefined>globalThis?.location
-  const navigator = <Navigator | undefined>globalThis?.navigator
+  const location = <Location | undefined>globalThis.location
+  const navigator = <Navigator | undefined>globalThis.navigator
   // Note: `globalThis` requires node >=12.0.0
 
   // Will hold the return value if any.

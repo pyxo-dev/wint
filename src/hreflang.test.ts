@@ -67,6 +67,7 @@ test('[hreflang] with `hreflangs` provided, should use them in place of langTags
 test('[hreflangPaths] With valid input, should return an object.', () => {
   const urlPaths = { es: '/blog/reciente', en: '/blog/recent' }
   const xDefaultLangTag = 'es'
+
   expect(
     hreflangPaths({
       urlPaths,
@@ -87,6 +88,32 @@ test('[hreflangPaths] With valid input, should return an object.', () => {
     },
     'hreflang-x-default': {
       href: 'http://example.com/es/blog/reciente',
+      hreflang: 'x-default',
+      rel: 'alternate',
+    },
+  })
+
+  expect(
+    hreflangPaths({
+      urlPaths,
+      xDefaultLangTag,
+      urlProtocol: 'http',
+      urlMode: 'host',
+      langTagsHosts: { es: 'example-es.com', en: 'example.co.uk' },
+    })
+  ).toStrictEqual({
+    'hreflang-en': {
+      href: 'http://example.co.uk/blog/recent',
+      hreflang: 'en',
+      rel: 'alternate',
+    },
+    'hreflang-es': {
+      href: 'http://example-es.com/blog/reciente',
+      hreflang: 'es',
+      rel: 'alternate',
+    },
+    'hreflang-x-default': {
+      href: 'http://example-es.com/blog/reciente',
       hreflang: 'x-default',
       rel: 'alternate',
     },
