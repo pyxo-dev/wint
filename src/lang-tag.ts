@@ -404,7 +404,22 @@ corresponding host defined.
 
   // Determine the language tag based on the user's client preferences.
   if (useClientPreferredLangTags) {
-    const prefs = clientPreferredLangTags || navigator?.languages?.join(', ')
+    let prefs = clientPreferredLangTags
+
+    // In a `dom` environment.
+    if (!prefs && navigator?.languages?.length) {
+      // Quality value unit.
+      const qUnit = 1 / navigator.languages.length
+
+      prefs = navigator.languages
+        .map((l, i) => {
+          // Quality values are up to three decimal digits.
+          const q = Math.floor(1000 * (1 - i * qUnit)) / 1000
+          return `${l};q=${q}`
+        })
+        .join(', ')
+    }
+
     if (prefs) {
       const negotiator = new Negotiator({
         headers: { 'accept-language': prefs },
