@@ -1,5 +1,3 @@
-#+OPTIONS: toc:nil
-
 * Introduction
 Wint (Web apps internationalization) is a javascript library to facilitate the
 i18n of web apps.
