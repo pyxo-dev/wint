@@ -1,8 +1,8 @@
 #+OPTIONS: toc:nil
 
 * Introduction
-Wint (*W*​eb apps *int*​ernationalization) is a javascript library to facilitate
-the i18n of web apps.
+Wint (Web apps internationalization) is a javascript library to facilitate the
+i18n of web apps.
 
 * Installation
 #+begin_src sh
@@ -31,3 +31,8 @@ API docs: [[https://wint.pyxo.net/api][wint.pyxo.net/api]]
 Repository: [[https://github.com/pyxo-dev/wint][github.com/pyxo-dev/wint]]
 
 Contributions are welcome!
+
+* Ecosystem
+- [[https://github.com/pyxo-dev/wint][Wint]] Web apps int.
+- [[https://github.com/pyxo-dev/vint][Vint]] Vue int.
+- [[https://github.com/pyxo-dev/qint][Qint]] Quasar int.
