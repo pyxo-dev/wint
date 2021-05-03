@@ -125,6 +125,7 @@ export interface WintCookieConf {
 export interface WintLangTagConf {
     host?: string;
     hreflang?: string;
+    nativeName?: string;
 }
 
 // @beta

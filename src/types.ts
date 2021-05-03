@@ -82,6 +82,11 @@ export interface WintUrlConf {
  */
 export interface WintLangTagConf {
   /**
+   * The native name of the language tag. (Can be used for example in a language
+   * tag selector.)
+   */
+  nativeName?: string
+  /**
    * The host corresponding to the language tag. Needed when the URL structure
    * mode is set to `host`.
    *
