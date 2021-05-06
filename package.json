@@ -1,7 +1,13 @@
 {
   "name": "@pyxo/wint",
-  "version": "1.0.0-beta.5",
+  "version": "1.0.0-beta.6",
   "description": "Wint (Web apps Internationalization), a library to make your web app i18n easier.",
+  "keywords": [
+    "Internationalization",
+    "I18n",
+    "Localization",
+    "L10n"
+  ],
   "publishConfig": {
     "access": "public"
   },
@@ -29,10 +35,8 @@
   "devDependencies": {
     "@microsoft/api-documenter": "^7.12.22",
     "@microsoft/api-extractor": "^7.13.5",
-    "@types/cookie": "^0.4.0",
     "@types/jest": "^26.0.22",
     "@types/jsdom": "^16.2.10",
-    "@types/negotiator": "^0.6.1",
     "@typescript-eslint/eslint-plugin": "^4.21.0",
     "@typescript-eslint/parser": "^4.21.0",
     "eslint": "^7.23.0",
@@ -46,6 +50,8 @@
     "vuepress": "^2.0.0-beta.8"
   },
   "dependencies": {
+    "@types/cookie": "^0.4.0",
+    "@types/negotiator": "^0.6.1",
     "cookie": "^0.4.1",
     "negotiator": "^0.6.2"
   }
