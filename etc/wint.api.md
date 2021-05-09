@@ -8,6 +8,9 @@ import type { CookieSerializeOptions } from 'cookie';
 import type { ServerResponse } from 'http';
 
 // @beta
+export function createWint(conf: WintConf): Wint;
+
+// @beta
 export function getLangTag(options: GetLangTagOptions): string | undefined;
 
 // @beta
@@ -55,11 +58,11 @@ export interface GetPathHrefOptions {
 export function hreflang(options: HreflangOptions): Record<string, HreflangLink> | undefined;
 
 // @beta
-export interface HreflangLink {
-    href: string;
-    hreflang: string;
+export type HreflangLink = {
     rel: 'alternate';
-}
+    hreflang: string;
+    href: string;
+};
 
 // @beta
 export interface HreflangOptions {
@@ -103,6 +106,17 @@ export interface SetLangTagCookieOptions {
     cookieOptions?: CookieSerializeOptions;
     langTag: string;
     serverResponse?: ServerResponse;
+}
+
+// @beta
+export interface Wint {
+    conf: WintConf;
+    getLangTag: (options?: Partial<GetLangTagOptions>) => ReturnType<typeof getLangTag>;
+    getLangTagCookie: typeof getLangTagCookie;
+    getPathHref: typeof getPathHref;
+    hreflang: typeof hreflang;
+    hreflangPaths: typeof hreflangPaths;
+    setLangTagCookie: typeof setLangTagCookie;
 }
 
 // @beta

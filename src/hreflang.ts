@@ -6,7 +6,7 @@ import { getPathHref } from '.'
  *
  * @beta
  */
-export interface HreflangLink {
+export type HreflangLink = {
   /**
    * The `rel` attribute of the hreflang link.
    */
