@@ -6,6 +6,7 @@ import type {
   HreflangPathsOptions,
   SetLangTagCookieOptions,
   WintConf,
+  WintSsrContext,
 } from '.'
 import {
   getLangTag,
@@ -44,6 +45,9 @@ export interface Wint {
 
   /** {@inheritDoc setLangTagCookie} */
   setLangTagCookie: typeof setLangTagCookie
+
+  /** The `ssrContext` used when creating the Wint instance. */
+  ssrContext?: WintSsrContext | null
 }
 
 /**
@@ -54,7 +58,10 @@ export interface Wint {
  * @param conf - Configuration object.
  * @returns Wint instance.
  */
-export function createWint(conf: WintConf): Wint {
+export function createWint(
+  conf: WintConf,
+  ssrContext?: WintSsrContext | null
+): Wint {
   // Destructure the configuration.
   const {
     langTags,
@@ -64,6 +71,9 @@ export function createWint(conf: WintConf): Wint {
     useClientPreferredLangTags,
   } = conf
   const { useCookie = false, cookieKey, cookieOptions } = cookieConf || {}
+
+  const clientRequest = ssrContext?.req
+  const serverResponse = ssrContext?.res
 
   // Get the language tags hosts from `langTagsConf`.
   const langTagsHosts: Record<string, string> = {}
@@ -82,7 +92,7 @@ export function createWint(conf: WintConf): Wint {
   // The following will make the standalone functions available in the wint
   // instance. These functions can then be used in a much easier way, as there
   // will be no need to provide the options that are already present in the
-  // instance configuration.
+  // instance configuration or ssrContext.
 
   const getLangTagFn = (options?: Partial<GetLangTagOptions>) => {
     const fallbackOpts: GetLangTagOptions = {
@@ -93,6 +103,7 @@ export function createWint(conf: WintConf): Wint {
       useCookie,
       cookieKey,
       useClientPreferredLangTags,
+      clientRequest,
     }
     return getLangTag(Object.assign({}, fallbackOpts, options))
   }
@@ -102,6 +113,7 @@ export function createWint(conf: WintConf): Wint {
       urlMode,
       langTagHost: langTagsHosts[options.langTag],
       searchParamKey,
+      clientRequest,
     }
     return getPathHref(Object.assign({}, fallbackOpts, options))
   }
@@ -117,12 +129,13 @@ export function createWint(conf: WintConf): Wint {
       urlMode,
       langTagsHosts,
       searchParamKey,
+      clientRequest,
     }
     return hreflangPaths(Object.assign({}, fallbackOpts, options))
   }
 
   const getLangTagCookieFn = (options?: GetLangTagCookieOptions) => {
-    const fallbackOpts: GetLangTagCookieOptions = { cookieKey }
+    const fallbackOpts: GetLangTagCookieOptions = { cookieKey, clientRequest }
     return getLangTagCookie(Object.assign({}, fallbackOpts, options))
   }
 
@@ -130,6 +143,7 @@ export function createWint(conf: WintConf): Wint {
     const fallbackOpts: Partial<SetLangTagCookieOptions> = {
       cookieOptions,
       cookieKey,
+      serverResponse,
     }
     return setLangTagCookie(Object.assign({}, fallbackOpts, options))
   }
@@ -143,5 +157,6 @@ export function createWint(conf: WintConf): Wint {
     hreflangPaths: hreflangPathsFn,
     getLangTagCookie: getLangTagCookieFn,
     setLangTagCookie: setLangTagCookieFn,
+    ssrContext,
   }
 }

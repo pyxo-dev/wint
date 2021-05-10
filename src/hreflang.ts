@@ -1,3 +1,4 @@
+import type { ClientRequest } from 'http'
 import type { WintUrlConf } from '.'
 import { getPathHref } from '.'
 
@@ -210,6 +211,15 @@ export interface HreflangPathsOptions {
    * ```
    */
   searchParamKey?: string
+
+  /**
+   * The request object sent from the client. Available when running in a node
+   * server environment.
+   *
+   * @remarks
+   * Used to avoid the inconvenience of supplying some options one by one.
+   */
+  clientRequest?: ClientRequest
 }
 
 /**
@@ -228,6 +238,13 @@ export interface HreflangPathsOptions {
 export function hreflangPaths(
   options: HreflangPathsOptions
 ): Record<string, HreflangLink> | undefined {
+  const req = options.clientRequest
+  // Extract the options available in the request object.
+  const reqOpts: Partial<HreflangPathsOptions> = {
+    urlHost: req?.host,
+    urlProtocol: req?.protocol,
+  }
+
   const {
     urlPaths,
     xDefaultLangTag,
@@ -238,7 +255,7 @@ export function hreflangPaths(
     domain,
     langTagsHosts,
     searchParamKey,
-  } = options
+  } = Object.assign({}, reqOpts, options)
 
   // Will hold the constructed hrefs.
   const hrefs: { [langTag: string]: string } = {}

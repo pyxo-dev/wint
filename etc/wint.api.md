@@ -4,11 +4,12 @@
 
 ```ts
 
+import type { ClientRequest } from 'http';
 import type { CookieSerializeOptions } from 'cookie';
 import type { ServerResponse } from 'http';
 
 // @beta
-export function createWint(conf: WintConf): Wint;
+export function createWint(conf: WintConf, ssrContext?: WintSsrContext | null): Wint;
 
 // @beta
 export function getLangTag(options: GetLangTagOptions): string | undefined;
@@ -18,6 +19,7 @@ export function getLangTagCookie(options?: GetLangTagCookieOptions): string | un
 
 // @beta
 export interface GetLangTagCookieOptions {
+    clientRequest?: ClientRequest;
     cookieKey?: string;
     cookies?: string;
 }
@@ -25,6 +27,7 @@ export interface GetLangTagCookieOptions {
 // @beta
 export interface GetLangTagOptions {
     clientPreferredLangTags?: string;
+    clientRequest?: ClientRequest;
     cookieKey?: string;
     cookies?: string;
     langTags: string[];
@@ -44,6 +47,7 @@ export function getPathHref(options: GetPathHrefOptions): string | undefined;
 
 // @beta
 export interface GetPathHrefOptions {
+    clientRequest?: ClientRequest;
     domain?: string;
     langTag: string;
     langTagHost?: string;
@@ -80,6 +84,7 @@ export function hreflangPaths(options: HreflangPathsOptions): Record<string, Hre
 
 // @beta
 export interface HreflangPathsOptions {
+    clientRequest?: ClientRequest;
     domain?: string;
     hreflangs?: {
         [langTag: string]: string;
@@ -117,6 +122,7 @@ export interface Wint {
     hreflang: typeof hreflang;
     hreflangPaths: typeof hreflangPaths;
     setLangTagCookie: typeof setLangTagCookie;
+    ssrContext?: WintSsrContext | null;
 }
 
 // @beta
@@ -146,6 +152,14 @@ export interface WintLangTagConf {
 export interface WintLangTagsConf {
     // (undocumented)
     [langTag: string]: WintLangTagConf;
+}
+
+// @beta
+export interface WintSsrContext {
+    // (undocumented)
+    req?: ClientRequest;
+    // (undocumented)
+    res?: ServerResponse;
 }
 
 // @beta

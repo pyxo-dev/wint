@@ -1,3 +1,4 @@
+import type { ClientRequest } from 'http'
 import Negotiator from 'negotiator'
 import type { WintUrlConf } from '.'
 import { getLangTagCookie } from '.'
@@ -175,6 +176,15 @@ export interface GetLangTagOptions {
    * ```
    */
   clientPreferredLangTags?: string
+
+  /**
+   * The request object sent from the client. Available when running in a node
+   * server environment.
+   *
+   * @remarks
+   * Used to avoid the inconvenience of supplying some options one by one.
+   */
+  clientRequest?: ClientRequest
 }
 
 /**
@@ -257,6 +267,17 @@ export interface GetLangTagOptions {
  * tags list is empty or contains an empty string.
  */
 export function getLangTag(options: GetLangTagOptions): string | undefined {
+  const req = options.clientRequest
+  // Extract the options available in the request object.
+  const reqOpts: Partial<GetLangTagOptions> = {
+    urlHost: req?.host,
+    urlPath: req?.path,
+    cookies: <string | undefined>req?.getHeader('Cookie'),
+    clientPreferredLangTags: <string | undefined>(
+      req?.getHeader('Accept-Language')
+    ),
+  }
+
   const {
     langTags,
     urlMode,
@@ -269,7 +290,7 @@ export function getLangTag(options: GetLangTagOptions): string | undefined {
     cookies,
     useClientPreferredLangTags,
     clientPreferredLangTags,
-  } = options
+  } = Object.assign({}, reqOpts, options)
 
   // Remove duplicates if any.
   const tags = [...new Set(langTags)]

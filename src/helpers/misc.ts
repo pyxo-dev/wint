@@ -1,3 +1,4 @@
+import type { ClientRequest } from 'http'
 import type { WintUrlConf } from '..'
 
 /**
@@ -101,6 +102,15 @@ export interface GetPathHrefOptions {
    * ```
    */
   searchParamKey?: string
+
+  /**
+   * The request object sent from the client. Available when running in a node
+   * server environment.
+   *
+   * @remarks
+   * Used to avoid the inconvenience of supplying some options one by one.
+   */
+  clientRequest?: ClientRequest
 }
 
 /**
@@ -137,6 +147,13 @@ export interface GetPathHrefOptions {
  * @returns The built href, or `undefined` when the input is invalid.
  */
 export function getPathHref(options: GetPathHrefOptions): string | undefined {
+  const req = options.clientRequest
+  // Extract the options available in the request object.
+  const reqOpts: Partial<GetPathHrefOptions> = {
+    urlHost: req?.host,
+    urlProtocol: req?.protocol,
+  }
+
   const {
     urlPath,
     langTag,
@@ -146,7 +163,7 @@ export function getPathHref(options: GetPathHrefOptions): string | undefined {
     domain,
     langTagHost,
     searchParamKey,
-  } = options
+  } = Object.assign({}, reqOpts, options)
 
   // Validate the language tag.
   if (!langTag) {

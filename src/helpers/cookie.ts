@@ -1,6 +1,6 @@
 import type { CookieSerializeOptions } from 'cookie'
 import { parse, serialize } from 'cookie'
-import type { ServerResponse } from 'http'
+import type { ClientRequest, ServerResponse } from 'http'
 
 /**
  * Options for `getLangTagCookie` function.
@@ -37,6 +37,15 @@ export interface GetLangTagCookieOptions {
    * ```
    */
   cookies?: string
+
+  /**
+   * The request object sent from the client. Available when running in a node
+   * server environment.
+   *
+   * @remarks
+   * Used to avoid the inconvenience of supplying some options one by one.
+   */
+  clientRequest?: ClientRequest
 }
 
 /**
@@ -51,7 +60,13 @@ export interface GetLangTagCookieOptions {
 export function getLangTagCookie(
   options: GetLangTagCookieOptions = {}
 ): string | undefined {
-  const { cookieKey, cookies } = options
+  const req = options.clientRequest
+  // Extract the options available in the request object.
+  const reqOpts: Partial<GetLangTagCookieOptions> = {
+    cookies: <string | undefined>req?.getHeader('Cookie'),
+  }
+
+  const { cookieKey, cookies } = Object.assign({}, reqOpts, options)
 
   // Language tag cookie key. When not provided default it to `lang_tag`.
   const key = cookieKey || 'lang_tag'

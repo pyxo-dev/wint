@@ -1,4 +1,5 @@
 import type { CookieSerializeOptions } from 'cookie'
+import type { ClientRequest, ServerResponse } from 'http'
 
 /**
  * Miscellaneous types used by Wint.
@@ -206,4 +207,15 @@ export interface WintConf {
    * @defaultValue `false`
    */
   useClientPreferredLangTags?: boolean
+}
+
+/**
+ * An object containing the client request and the server response when running
+ * in a node server environment.
+ *
+ * @beta
+ */
+export interface WintSsrContext {
+  req?: ClientRequest
+  res?: ServerResponse
 }
