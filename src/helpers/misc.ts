@@ -1,5 +1,4 @@
-import type { ClientRequest } from 'http'
-import type { WintUrlConf } from '..'
+import type { WintServerContext, WintUrlConf } from '..'
 
 /**
  * Options for `getPathHref` function.
@@ -13,10 +12,10 @@ export interface GetPathHrefOptions {
    *
    * @example
    * ```ts
-   * urlPath: '/blog/recent'
+   * path: '/blog/recent'
    * ```
    */
-  urlPath: string
+  path: string
   /**
    * The language tag for which the href is built.
    */
@@ -44,32 +43,22 @@ export interface GetPathHrefOptions {
    *
    * @example
    * ```ts
-   * urlHost: 'example.com'
-   * urlHost: 'my-app.example.com:8000'
+   * host: 'example.com'
+   * host: 'my-app.example.com:8000'
    * ```
    */
-  urlHost?: string
+  host?: string
   /**
    * The URL protocol to use when building the href.
    *
-   * @remarks
-   *
-   * When not provided, Wint will try to retrieve it automatically from
-   * `globalThis.location` (available in a `dom` environment).
-   *
-   * ::: tip
-   *
-   * In a server environment you can get the protocol from the request object.
-   *
-   * :::
+   * @defaultValue 'https'
    *
    * @example
    * ```ts
-   * urlProtocol: 'https'
-   * urlProtocol: 'http'
+   * protocol: 'http'
    * ```
    */
-  urlProtocol?: string
+  protocol?: string
   /**
    * The domain to use when building the href. Needed for 'subdomain' mode.
    *
@@ -104,13 +93,10 @@ export interface GetPathHrefOptions {
   searchParamKey?: string
 
   /**
-   * The request object sent from the client. Available when running in a node
-   * server environment.
-   *
-   * @remarks
-   * Used to avoid the inconvenience of supplying some options one by one.
+   * The request sent from the client. Available when running in a node server
+   * environment.
    */
-  clientRequest?: ClientRequest
+  req?: WintServerContext['req']
 }
 
 /**
@@ -121,24 +107,24 @@ export interface GetPathHrefOptions {
  *
  * @example
  * ```ts
- * const urlPath = '/blog/recent?key=value'
+ * const path = '/blog/recent?key=value'
  * const langTag = 'en'
  *
  * // In a browser environment:
  * console.log(
- *   getPathHref({ urlPath, langTag }) ===
+ *   getPathHref({ path, langTag }) ===
  *     'https://example.com/en/blog/recent?key=value'
  *
- *   getPathHref({ urlPath, langTag, urlMode: 'subdomain', domain: 'example.com' }) ===
+ *   getPathHref({ path, langTag, urlMode: 'subdomain', domain: 'example.com' }) ===
  *     'https://en.example.com/blog/recent?key=value'
  *
- *   getPathHref({ urlPath, langTag, urlMode: 'host', langTagHost: 'example-en.com' }) ===
+ *   getPathHref({ path, langTag, urlMode: 'host', langTagHost: 'example-en.com' }) ===
  *     'https://example-en.com/blog/recent?key=value'
  *
- *   getPathHref({ urlPath, langTag, urlMode: 'search-param' }) ===
+ *   getPathHref({ path, langTag, urlMode: 'search-param' }) ===
  *     'https://example.com/blog/recent?key=value&l=en'
  *
- *   getPathHref({ urlPath, langTag, urlMode: 'none' }) ===
+ *   getPathHref({ path, langTag, urlMode: 'none' }) ===
  *     'https://example.com/blog/recent?key=value'
  * )
  * ```
@@ -147,19 +133,17 @@ export interface GetPathHrefOptions {
  * @returns The built href, or `undefined` when the input is invalid.
  */
 export function getPathHref(options: GetPathHrefOptions): string | undefined {
-  const req = options.clientRequest
   // Extract the options available in the request object.
-  const reqOpts: Partial<GetPathHrefOptions> = {
-    urlHost: req?.host,
-    urlProtocol: req?.protocol,
-  }
+  let reqOpts: Partial<GetPathHrefOptions> = {}
+  const req = options.req
+  if (req) reqOpts = { host: req.headers.host }
 
   const {
-    urlPath,
+    path,
     langTag,
     urlMode,
-    urlHost,
-    urlProtocol,
+    host,
+    protocol,
     domain,
     langTagHost,
     searchParamKey,
@@ -173,18 +157,14 @@ export function getPathHref(options: GetPathHrefOptions): string | undefined {
     return
   }
 
+  // Normalize the URL path.
+  const urlPath = path ? (path.startsWith('/') ? path : `/${path}`) : ''
+
   // The `location` object might be undefined in a non `dom` environment, the
   // following will add `undefined` to its type.
   const location = <Location | undefined>globalThis.location
 
-  const protocol = urlProtocol || location?.protocol?.replace(':', '')
-  // Validate the protocol.
-  if (!protocol) {
-    console.error(`
-[Wint getPathHref] No URL protocol provided and not in a dom environment.
-`)
-    return
-  }
+  const prot = protocol || 'https'
 
   // The URL mode defaults to 'prefix'.
   const mode =
@@ -192,10 +172,10 @@ export function getPathHref(options: GetPathHrefOptions): string | undefined {
       ? urlMode
       : 'prefix'
 
-  const host = urlHost || location?.host
+  const urlHost = host || location?.host
   // Validate the host for the modes that need it.
   if (['prefix', 'search-param', 'none'].includes(mode)) {
-    if (!host) {
+    if (!urlHost) {
       console.error(`
 [Wint getPathHref] "${mode}" mode: No URL host provided and not in a dom
 environment.
@@ -207,7 +187,7 @@ environment.
     //                             'prefix' mode                             //
     ///////////////////////////////////////////////////////////////////////////
 
-    if (mode === 'prefix') return `${protocol}://${host}/${langTag}${urlPath}`
+    if (mode === 'prefix') return `${prot}://${urlHost}/${langTag}${urlPath}`
 
     ///////////////////////////////////////////////////////////////////////////
     //                          'search-param' mode                          //
@@ -217,7 +197,7 @@ environment.
       // Language tag url search param key.
       const key = searchParamKey || 'l'
 
-      const url = new URL(`${protocol}://${host}${urlPath}`)
+      const url = new URL(`${prot}://${urlHost}${urlPath}`)
       url.searchParams.set(key, langTag)
 
       return url.href
@@ -227,7 +207,7 @@ environment.
     //                              'none' mode                              //
     ///////////////////////////////////////////////////////////////////////////
 
-    return `${protocol}://${host}${urlPath}`
+    return `${prot}://${urlHost}${urlPath}`
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -242,7 +222,7 @@ environment.
 `)
       return
     }
-    return `${protocol}://${langTag}.${domain}${urlPath}`
+    return `${prot}://${langTag}.${domain}${urlPath}`
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -256,5 +236,5 @@ environment.
 `)
     return
   }
-  return `${protocol}://${langTagHost}${urlPath}`
+  return `${prot}://${langTagHost}${urlPath}`
 }

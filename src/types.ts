@@ -1,5 +1,5 @@
 import type { CookieSerializeOptions } from 'cookie'
-import type { ClientRequest, ServerResponse } from 'http'
+import type { IncomingMessage, ServerResponse } from 'http'
 
 /**
  * Miscellaneous types used by Wint.
@@ -215,7 +215,9 @@ export interface WintConf {
  *
  * @beta
  */
-export interface WintSsrContext {
-  req?: ClientRequest
+export interface WintServerContext {
+  /** The request sent from the client. */
+  req?: IncomingMessage
+  /** The server response. */
   res?: ServerResponse
 }

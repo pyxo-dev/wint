@@ -4,50 +4,43 @@ import { getPathHref } from '.'
  * getPathHref function.
  */
 
-const urlPath = '/blog/recent?key=value'
+const path = '/blog/recent?key=value'
 const langTag = 'en'
-const urlProtocol = 'https'
-const urlHost = 'example.com'
+const host = 'example.com'
 
 test('[getPathHref] With invalid input, should return undefined', () => {
-  expect(getPathHref({ urlPath, langTag: '' })).toBeUndefined()
-  expect(getPathHref({ urlPath, langTag })).toBeUndefined()
-  expect(getPathHref({ urlPath, langTag, urlProtocol })).toBeUndefined()
+  expect(getPathHref({ path, langTag: '' })).toBeUndefined()
+  expect(getPathHref({ path, langTag })).toBeUndefined()
+  expect(getPathHref({ path, langTag })).toBeUndefined()
 })
 
 test('[getPathHref] Prefix mode.', () => {
-  expect(getPathHref({ urlPath, langTag, urlProtocol, urlHost })).toBe(
+  expect(getPathHref({ path, langTag, host })).toBe(
     'https://example.com/en/blog/recent?key=value'
   )
 })
 
 test('[getPathHref] Subdomain mode.', () => {
-  expect(
-    getPathHref({ urlPath, langTag, urlMode: 'subdomain', urlProtocol })
-  ).toBeUndefined()
+  expect(getPathHref({ path, langTag, urlMode: 'subdomain' })).toBeUndefined()
 
   expect(
     getPathHref({
-      urlPath,
+      path,
       langTag,
       urlMode: 'subdomain',
-      urlProtocol,
       domain: 'example.com',
     })
   ).toBe('https://en.example.com/blog/recent?key=value')
 })
 
 test('[getPathHref] Host mode.', () => {
-  expect(
-    getPathHref({ urlPath, langTag, urlMode: 'host', urlProtocol })
-  ).toBeUndefined()
+  expect(getPathHref({ path, langTag, urlMode: 'host' })).toBeUndefined()
 
   expect(
     getPathHref({
-      urlPath,
+      path,
       langTag,
       urlMode: 'host',
-      urlProtocol,
       langTagHost: 'example-en.com',
     })
   ).toBe('https://example-en.com/blog/recent?key=value')
@@ -56,11 +49,10 @@ test('[getPathHref] Host mode.', () => {
 test('[getPathHref] Search param mode.', () => {
   expect(
     getPathHref({
-      urlPath,
+      path,
       langTag,
       urlMode: 'search-param',
-      urlProtocol,
-      urlHost,
+      host,
     })
   ).toBe('https://example.com/blog/recent?key=value&l=en')
 })
@@ -68,11 +60,10 @@ test('[getPathHref] Search param mode.', () => {
 test('[getPathHref] "none" mode.', () => {
   expect(
     getPathHref({
-      urlPath,
+      path,
       langTag,
       urlMode: 'none',
-      urlProtocol,
-      urlHost,
+      host,
     })
   ).toBe('https://example.com/blog/recent?key=value')
 })

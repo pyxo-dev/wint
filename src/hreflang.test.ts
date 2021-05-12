@@ -65,15 +65,15 @@ test('[hreflang] with `hreflangs` provided, should use them in place of langTags
  * hreflangPaths function.
  */
 test('[hreflangPaths] With valid input, should return an object.', () => {
-  const urlPaths = { es: '/blog/reciente', en: '/blog/recent' }
+  const paths = { es: '/blog/reciente', en: '/blog/recent' }
   const xDefaultLangTag = 'es'
 
   expect(
     hreflangPaths({
-      urlPaths,
+      paths,
       xDefaultLangTag,
-      urlProtocol: 'http',
-      urlHost: 'example.com',
+      protocol: 'http',
+      host: 'example.com',
     })
   ).toStrictEqual({
     'hreflang-en': {
@@ -95,9 +95,9 @@ test('[hreflangPaths] With valid input, should return an object.', () => {
 
   expect(
     hreflangPaths({
-      urlPaths,
+      paths,
       xDefaultLangTag,
-      urlProtocol: 'http',
+      protocol: 'http',
       urlMode: 'host',
       langTagsHosts: { es: 'example-es.com', en: 'example.co.uk' },
     })
@@ -121,11 +121,11 @@ test('[hreflangPaths] With valid input, should return an object.', () => {
 })
 
 test('[hreflangPaths] With invalid input, should return undefined.', () => {
-  const urlPaths = { es: '/blog/reciente', en: '/blog/recent' }
+  const paths = { es: '/blog/reciente', en: '/blog/recent' }
   const xDefaultLangTag = 'es'
   expect(
     hreflangPaths({
-      urlPaths,
+      paths,
       xDefaultLangTag,
     })
   ).toBeUndefined()

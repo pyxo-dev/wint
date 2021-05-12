@@ -1,6 +1,6 @@
 import type { CookieSerializeOptions } from 'cookie'
 import { parse, serialize } from 'cookie'
-import type { ClientRequest, ServerResponse } from 'http'
+import type { WintServerContext } from '..'
 
 /**
  * Options for `getLangTagCookie` function.
@@ -15,37 +15,35 @@ export interface GetLangTagCookieOptions {
    */
   cookieKey?: string
   /**
-   * A cookies list, written using the same syntax of the http 'Cookie' header.
+   * A cookie string, written using the same syntax of the http 'Cookie' header.
    *
    * See {@link https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cookie#syntax | 'Cookie' header syntax}
    *
    * @remarks
    *
-   * When not provided, Wint will try to retrieve the cookies automatically
-   * from `globalThis.document.cookie` (available in a `dom` environment).
+   * When not provided, Wint will try to retrieve the cookie string
+   * automatically from `globalThis.document.cookie` (available in a `dom`
+   * environment).
    *
    * ::: tip
    *
-   * In a server environment you can get the cookies from the request object
-   * 'Cookie' header.
+   * In a server environment you can get the cookie string from the request
+   * object 'Cookie' header.
    *
    * :::
    *
    * @example
    * ```ts
-   * cookies: 'lang_tag=en; strawberry_cookie=tasty'
+   * cookie: 'lang_tag=en; strawberry_cookie=tasty'
    * ```
    */
-  cookies?: string
+  cookie?: string
 
   /**
-   * The request object sent from the client. Available when running in a node
-   * server environment.
-   *
-   * @remarks
-   * Used to avoid the inconvenience of supplying some options one by one.
+   * The request sent from the client. Available when running in a node server
+   * environment.
    */
-  clientRequest?: ClientRequest
+  req?: WintServerContext['req']
 }
 
 /**
@@ -60,23 +58,23 @@ export interface GetLangTagCookieOptions {
 export function getLangTagCookie(
   options: GetLangTagCookieOptions = {}
 ): string | undefined {
-  const req = options.clientRequest
   // Extract the options available in the request object.
-  const reqOpts: Partial<GetLangTagCookieOptions> = {
-    cookies: <string | undefined>req?.getHeader('Cookie'),
-  }
+  let reqOpts: Partial<GetLangTagCookieOptions> = {}
+  const req = options.req
+  if (req) reqOpts = { cookie: req.headers.cookie }
 
-  const { cookieKey, cookies } = Object.assign({}, reqOpts, options)
+  const { cookieKey, cookie } = Object.assign({}, reqOpts, options)
 
-  // Language tag cookie key. When not provided default it to `lang_tag`.
+  // Language tag cookie key. When not provided, default it to `lang_tag`.
   const key = cookieKey || 'lang_tag'
 
   // The `document` object might be undefined in a non `dom` environment, the
   // following will add `undefined` to its type.
   const document = <Document | undefined>globalThis.document
 
-  // If cookies are not provided, try to retrieve them (when in a `dom` env).
-  const cookie_str = cookies || document?.cookie
+  // If the cookie string is not provided, try to retrieve it (when in a `dom`
+  // env).
+  const cookie_str = cookie || document?.cookie
 
   // After parsing the cookie string, we return the language tag cookie.
   if (cookie_str) return parse(cookie_str)[key]
@@ -115,7 +113,7 @@ export interface SetLangTagCookieOptions {
    * When not provided, Wint will use `globalThis.document.cookie` to set the
    * cookie in a `dom` environment.
    */
-  serverResponse?: ServerResponse
+  res?: WintServerContext['res']
 }
 
 /**
@@ -130,7 +128,7 @@ export interface SetLangTagCookieOptions {
 export function setLangTagCookie(
   options: SetLangTagCookieOptions
 ): string | undefined {
-  const { langTag, cookieOptions, cookieKey, serverResponse: res } = options
+  const { langTag, cookieOptions, cookieKey, res } = options
 
   // Validate the language tag.
   if (!langTag) {

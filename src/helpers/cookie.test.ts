@@ -12,7 +12,7 @@ test(`[getLangTagCookie] Without any cookies provided (or set), should return
 test(`[getLangTagCookie] With cookies provided, should return the cookie
 value.`, () => {
   expect(
-    getLangTagCookie({ cookies: 'lang_tag=en; strawberry_cookie=tasty' })
+    getLangTagCookie({ cookie: 'lang_tag=en; strawberry_cookie=tasty' })
   ).toBe('en')
 })
 
@@ -20,7 +20,7 @@ test('[getLangTagCookie] With `cookieKey` provided.', () => {
   expect(
     getLangTagCookie({
       cookieKey: 'langTag',
-      cookies: 'langTag=en; strawberry_cookie=tasty',
+      cookie: 'langTag=en; strawberry_cookie=tasty',
     })
   ).toBe('en')
 })
@@ -43,7 +43,7 @@ test('[setLangTagCookie] With a serverResponse provided, should set the cookie.'
     setLangTagCookie({
       langTag: 'ar',
       cookieOptions: { sameSite: 'lax' },
-      serverResponse: res,
+      res,
     })
   ).toBe('lang_tag=ar; SameSite=Lax')
 

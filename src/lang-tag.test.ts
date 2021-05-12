@@ -16,17 +16,17 @@ test('[getLangTag] invalid input: with empty langTags, should return `undefined`
 
 test('[getLangTag] prefix mode: without a matching prefix, should fallback to the first lang tag.', () => {
   expect(getLangTag({ langTags })).toBe('arb')
-  expect(getLangTag({ langTags, urlPath: '/it/blog' })).toBe('arb')
+  expect(getLangTag({ langTags, url: '/it/blog' })).toBe('arb')
 })
 
 test('[getLangTag] prefix mode: with a matching prefix, should return the corresponding lang tag.', () => {
-  expect(getLangTag({ langTags, urlPath: '/zh-yue/blog' })).toBe('zh-yue')
+  expect(getLangTag({ langTags, url: '/zh-yue/blog' })).toBe('zh-yue')
 })
 
 test('[getLangTag] subdomain mode: without a matching subdomain, should fallback to the first lang tag.', () => {
   expect(getLangTag({ langTags, urlMode: 'subdomain' })).toBe('arb')
   expect(
-    getLangTag({ langTags, urlMode: 'subdomain', urlHost: 'it.example.com' })
+    getLangTag({ langTags, urlMode: 'subdomain', host: 'it.example.com' })
   ).toBe('arb')
 })
 
@@ -35,7 +35,7 @@ test('[getLangTag] subdomain mode: with a matching subdomain, should return the 
     getLangTag({
       langTags,
       urlMode: 'subdomain',
-      urlHost: 'es-419.example.com',
+      host: 'es-419.example.com',
     })
   ).toBe('es-419')
 })
@@ -45,7 +45,7 @@ test('[getLangTag] host mode: without a matching host, should fallback to the fi
     getLangTag({
       langTags,
       urlMode: 'host',
-      urlHost: 'example.com',
+      host: 'example.com',
     })
   ).toBe('arb')
 
@@ -62,7 +62,7 @@ test('[getLangTag] host mode: without a matching host, should fallback to the fi
       langTags,
       urlMode: 'host',
       langTagsHosts,
-      urlHost: 'example.com',
+      host: 'example.com',
     })
   ).toBe('arb')
 })
@@ -73,7 +73,7 @@ test('[getLangTag] host mode: with a matching host, should return the correspond
       langTags,
       urlMode: 'host',
       langTagsHosts,
-      urlHost: 'en-example.com',
+      host: 'en-example.com',
     })
   ).toBe('en')
 })
@@ -82,17 +82,17 @@ test('[getLangTag] search-param mode: without a matching search param, should fa
   expect(getLangTag({ langTags, urlMode: 'search-param' })).toBe('arb')
 
   expect(
-    getLangTag({ langTags, urlMode: 'search-param', urlPath: '/blog?l=it' })
+    getLangTag({ langTags, urlMode: 'search-param', url: '/blog?l=it' })
   ).toBe('arb')
 
   expect(
-    getLangTag({ langTags, urlMode: 'search-param', urlPath: '/blog?lg=it' })
+    getLangTag({ langTags, urlMode: 'search-param', url: '/blog?lg=it' })
   ).toBe('arb')
 })
 
 test('[getLangTag] search-param mode: with a matching search param, should return the corresponding lang tag.', () => {
   expect(
-    getLangTag({ langTags, urlMode: 'search-param', urlPath: '/blog?l=en' })
+    getLangTag({ langTags, urlMode: 'search-param', url: '/blog?l=en' })
   ).toBe('en')
 })
 
@@ -110,7 +110,7 @@ test('[getLangTag] cookie enabled: without a matching cookie, should fallback to
       langTags,
       urlMode: 'none',
       useCookie: true,
-      cookies: 'strawberry_cookie=tasty',
+      cookie: 'strawberry_cookie=tasty',
     })
   ).toBe('arb')
 
@@ -119,7 +119,7 @@ test('[getLangTag] cookie enabled: without a matching cookie, should fallback to
       langTags,
       urlMode: 'none',
       useCookie: true,
-      cookies: 'lang_tag=it; strawberry_cookie=tasty',
+      cookie: 'lang_tag=it; strawberry_cookie=tasty',
     })
   ).toBe('arb')
 })
@@ -130,7 +130,7 @@ test('[getLangTag] cookie enabled: with a matching cookie, should return the cor
       langTags,
       urlMode: 'none',
       useCookie: true,
-      cookies: 'lang_tag=zh-Hant-HK; strawberry_cookie=tasty',
+      cookie: 'lang_tag=zh-Hant-HK; strawberry_cookie=tasty',
     })
   ).toBe('zh-Hant-HK')
 })

@@ -1,5 +1,4 @@
-import type { ClientRequest } from 'http'
-import type { WintUrlConf } from '.'
+import type { WintServerContext, WintUrlConf } from '.'
 import { getPathHref } from '.'
 
 /**
@@ -37,7 +36,7 @@ export interface HreflangOptions {
    * {ar: 'https://example.com/ar/مدونة', en: 'https://example.com/en/blog'}
    * ```
    */
-  hrefs: { [langTag: string]: string }
+  hrefs: Record<string, string>
   /**
    * The language tag that will be used for the `x-default` hreflang.
    */
@@ -50,7 +49,7 @@ export interface HreflangOptions {
    *
    * Intended to be used when a language tag is not a valid hreflang attribute.
    */
-  hreflangs?: { [langTag: string]: string }
+  hreflangs?: Record<string, string>
 }
 
 /**
@@ -119,7 +118,7 @@ export interface HreflangPathsOptions {
    * { en: 'blog/recent', ar: encodeURI('مدونة/مدونات-حديثة') }
    * ```
    */
-  urlPaths: { [langTag: string]: string }
+  paths: Record<string, string>
   /**
    * {@inheritDoc HreflangOptions.xDefaultLangTag}
    */
@@ -127,7 +126,7 @@ export interface HreflangPathsOptions {
   /**
    * {@inheritDoc HreflangOptions.hreflangs}
    */
-  hreflangs?: { [langTag: string]: string }
+  hreflangs?: Record<string, string>
   /**
    * The URL host (including the port if any) to use for the hreflangs `href`
    * attribute.
@@ -145,32 +144,22 @@ export interface HreflangPathsOptions {
    *
    * @example
    * ```ts
-   * urlHost: 'example.com'
-   * urlHost: 'my-app.example.com:8000'
+   * host: 'example.com'
+   * host: 'my-app.example.com:8000'
    * ```
    */
-  urlHost?: string
+  host?: string
   /**
    * The URL protocol to use for the hreflangs `href` attribute.
    *
-   * @remarks
-   *
-   * When not provided, Wint will try to retrieve it automatically from
-   * `globalThis.location` (available in a `dom` environment).
-   *
-   * ::: tip
-   *
-   * In a server environment you can get the protocol from the request object.
-   *
-   * :::
+   * @defaultValue 'https'
    *
    * @example
    * ```ts
-   * urlProtocol: 'https'
-   * urlProtocol: 'http'
+   * protocol: 'http'
    * ```
    */
-  urlProtocol?: string
+  protocol?: string
   /**
    * {@inheritDoc WintUrlConf.mode}
    */
@@ -198,7 +187,7 @@ export interface HreflangPathsOptions {
    * langTagsHosts: {es: 'localhost:8000', 'en-GB': 'localhost:8001'}
    * ```
    */
-  langTagsHosts?: { [langTag: string]: string }
+  langTagsHosts?: Record<string, string>
   /**
    * {@inheritDoc WintUrlConf.searchParamKey}
    *
@@ -213,13 +202,10 @@ export interface HreflangPathsOptions {
   searchParamKey?: string
 
   /**
-   * The request object sent from the client. Available when running in a node
-   * server environment.
-   *
-   * @remarks
-   * Used to avoid the inconvenience of supplying some options one by one.
+   * The request sent from the client. Available when running in a node server
+   * environment.
    */
-  clientRequest?: ClientRequest
+  req?: WintServerContext['req']
 }
 
 /**
@@ -238,19 +224,17 @@ export interface HreflangPathsOptions {
 export function hreflangPaths(
   options: HreflangPathsOptions
 ): Record<string, HreflangLink> | undefined {
-  const req = options.clientRequest
   // Extract the options available in the request object.
-  const reqOpts: Partial<HreflangPathsOptions> = {
-    urlHost: req?.host,
-    urlProtocol: req?.protocol,
-  }
+  let reqOpts: Partial<HreflangPathsOptions> = {}
+  const req = options.req
+  if (req) reqOpts = { host: req.headers.host }
 
   const {
-    urlPaths,
+    paths,
     xDefaultLangTag,
     hreflangs,
-    urlHost,
-    urlProtocol,
+    host,
+    protocol,
     urlMode,
     domain,
     langTagsHosts,
@@ -258,17 +242,17 @@ export function hreflangPaths(
   } = Object.assign({}, reqOpts, options)
 
   // Will hold the constructed hrefs.
-  const hrefs: { [langTag: string]: string } = {}
+  const hrefs: Record<string, string> = {}
 
   // For each language tag and its specified path:
-  for (const [langTag, urlPath] of Object.entries(urlPaths)) {
+  for (const [langTag, path] of Object.entries(paths)) {
     // Get the corresponding href.
     const pathHref = getPathHref({
-      urlPath,
+      path,
       langTag,
       urlMode,
-      urlHost,
-      urlProtocol,
+      host,
+      protocol,
       domain,
       langTagHost: langTagsHosts?.[langTag],
       searchParamKey,

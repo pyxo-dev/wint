@@ -1,6 +1,5 @@
-import type { ClientRequest } from 'http'
 import Negotiator from 'negotiator'
-import type { WintUrlConf } from '.'
+import type { WintServerContext, WintUrlConf } from '.'
 import { getLangTagCookie } from '.'
 
 /**
@@ -57,8 +56,8 @@ export interface GetLangTagOptions {
    */
   urlMode?: WintUrlConf['mode']
   /**
-   * The URL host (including the port if any) to use when determining the
-   * language tag in 'subdomain' and 'host' modes.
+   * The host (including the port if any) to use when determining the language
+   * tag in 'subdomain' and 'host' modes.
    *
    * @remarks
    *
@@ -73,14 +72,14 @@ export interface GetLangTagOptions {
    *
    * @example
    * ```ts
-   * urlHost: 'example.com'
-   * urlHost: 'my-app.example.com:8000'
+   * host: 'example.com'
+   * host: 'my-app.example.com:8000'
    * ```
    */
-  urlHost?: string
+  host?: string
   /**
-   * The part of the URL that comes after the host. Used when determining the
-   * language tag in 'prefix' and 'search-param' modes.
+   * The url to use when determining the language tag in 'prefix' and
+   * 'search-param' modes.
    *
    * @remarks
    *
@@ -95,11 +94,11 @@ export interface GetLangTagOptions {
    *
    * @example
    * ```ts
-   * urlPath: '/en/blog' // 'prefix' mode
-   * urlPath: '/blog?l=en' // 'search-param' mode
+   * url: '/en/blog' // 'prefix' mode
+   * url: '/blog?l=en' // 'search-param' mode
    * ```
    */
-  urlPath?: string
+  url?: string
   /**
    * {@inheritDoc WintUrlConf.searchParamKey}
    *
@@ -124,7 +123,7 @@ export interface GetLangTagOptions {
    * langTagsHosts: {es: 'localhost:8000', 'en-GB': 'localhost:8001'}
    * ```
    */
-  langTagsHosts?: { [langTag: string]: string }
+  langTagsHosts?: Record<string, string>
   /**
    * {@inheritDoc WintCookieConf.useCookie}
    *
@@ -138,14 +137,14 @@ export interface GetLangTagOptions {
    */
   cookieKey?: string
   /**
-   * {@inheritDoc GetLangTagCookieOptions.cookies}
+   * {@inheritDoc GetLangTagCookieOptions.cookie}
    *
    * @example
    * ```ts
-   * cookies: 'lang_tag=en; strawberry_cookie=tasty'
+   * cookie: 'lang_tag=en; strawberry_cookie=tasty'
    * ```
    */
-  cookies?: string
+  cookie?: string
   /**
    * {@inheritDoc WintConf.useClientPreferredLangTags}
    *
@@ -165,8 +164,8 @@ export interface GetLangTagOptions {
    *
    * ::: tip
    *
-   * In a server environment you can get the preferences from the
-   * request object 'Accept-Language' header.
+   * In a server environment you can get the preferences from the request object
+   * 'Accept-Language' header.
    *
    * :::
    *
@@ -178,13 +177,10 @@ export interface GetLangTagOptions {
   clientPreferredLangTags?: string
 
   /**
-   * The request object sent from the client. Available when running in a node
-   * server environment.
-   *
-   * @remarks
-   * Used to avoid the inconvenience of supplying some options one by one.
+   * The request sent from the client. Available when running in a node server
+   * environment.
    */
-  clientRequest?: ClientRequest
+  req?: WintServerContext['req']
 }
 
 /**
@@ -196,12 +192,12 @@ export interface GetLangTagOptions {
  *
  * @example
  *
- * When in a browser, or in a server that receives a request from a browser with
- * the following assumptions:
+ * When in a browser, or in a server that receives a request `request` from a
+ * browser with the following assumptions:
  *
  * - The browser URL is `https://es-419.example.com/zh-yue/blog?l=en`
  *
- * - The browser Cookies are set to `lang_tag=zh-Hant-HK; lemon_cookie=tasty`
+ * - The browser cookie string is set to `lang_tag=zh-Hant-HK; lemon_cookie=tasty`
  *
  * - The browser language preferences are `en-US;q=0.8, de;q=0.7, es;q=0.5`
  *
@@ -219,30 +215,19 @@ export interface GetLangTagOptions {
  * ]
  *
  *  console.log(
- *   getLangTag({ mode: 'prefix', langTags, urlPath: req?.originalUrl }) ===
- *     'zh-yue',
+ *    getLangTag({ mode: 'prefix', langTags, request }) === 'zh-yue',
  *
- *    getLangTag({ mode: 'subdomain', langTags, urlHost: req?.get('host') }) ===
- *     'es-419',
+ *    getLangTag({ mode: 'subdomain', langTags, request }) === 'es-419',
  *
- *    getLangTag({
- *     mode: 'search-param',
- *     langTags,
- *     urlPath: req?.originalUrl,
- *   }) === 'en',
+ *    getLangTag({ mode: 'search-param', langTags, request }) === 'en',
  *
- *    getLangTag({
- *     mode: 'none',
- *     langTags,
- *     useCookie: true,
- *     cookies: req?.get('cookie'),
- *   }) === 'zh-Hant-HK',
+ *    getLangTag({ mode: 'none', langTags, useCookie: true, request }) === 'zh-Hant-HK',
  *
  *    getLangTag({
  *     mode: 'none',
  *     langTags,
  *     useClientPreferredLangTags: true,
- *     clientPreferredLangTags: req?.get('accept-language'),
+ *     request,
  *   }) === 'en'
  * )
  *
@@ -257,7 +242,7 @@ export interface GetLangTagOptions {
  *     mode: 'host',
  *     langTags: ['arb', 'en-GB'],
  *     langTagsHosts,
- *     urlHost: req?.get('host'),
+ *     request,
  *   }) === 'en-GB'
  * )
  * ```
@@ -267,27 +252,27 @@ export interface GetLangTagOptions {
  * tags list is empty or contains an empty string.
  */
 export function getLangTag(options: GetLangTagOptions): string | undefined {
-  const req = options.clientRequest
   // Extract the options available in the request object.
-  const reqOpts: Partial<GetLangTagOptions> = {
-    urlHost: req?.host,
-    urlPath: req?.path,
-    cookies: <string | undefined>req?.getHeader('Cookie'),
-    clientPreferredLangTags: <string | undefined>(
-      req?.getHeader('Accept-Language')
-    ),
+  let reqOpts: Partial<GetLangTagOptions> = {}
+  const req = options.req
+  if (req) {
+    reqOpts = {
+      host: req.headers.host,
+      url: req.url,
+      clientPreferredLangTags: req.headers['accept-language'],
+    }
   }
 
   const {
     langTags,
     urlMode,
-    urlHost,
-    urlPath,
+    host,
+    url,
     searchParamKey,
     langTagsHosts,
     useCookie,
     cookieKey,
-    cookies,
+    cookie,
     useClientPreferredLangTags,
     clientPreferredLangTags,
   } = Object.assign({}, reqOpts, options)
@@ -325,7 +310,7 @@ string.
   /////////////////////////////////////////////////////////////////////////////
 
   if (mode === 'prefix') {
-    const prefixLangTag = (urlPath || location?.pathname)
+    const prefixLangTag = (url || location?.pathname)
       ?.split('/')[1]
       .toLowerCase()
 
@@ -341,10 +326,10 @@ string.
   /////////////////////////////////////////////////////////////////////////////
 
   if (mode === 'subdomain' || mode === 'host') {
-    const host = (urlHost || location?.host)?.toLowerCase()
+    const urlHost = (host || location?.host)?.toLowerCase()
 
     // Warn when the host is invalid.
-    if (!host) {
+    if (!urlHost) {
       console.warn(`
 [Wint getLangTag] "${mode}" mode: The URL host is empty or undefined.
 `)
@@ -354,8 +339,8 @@ string.
     //                            'subdomain' mode                           //
     ///////////////////////////////////////////////////////////////////////////
 
-    if (mode === 'subdomain' && host) {
-      const subdomainLangTag = host.split('.')[0]
+    if (mode === 'subdomain' && urlHost) {
+      const subdomainLangTag = urlHost.split('.')[0]
 
       // Find the language tag that corresponds to the URL host subdomain.
       tag = tags.find((t) => t.toLowerCase() === subdomainLangTag)
@@ -377,9 +362,9 @@ corresponding host defined.
         }
       }
 
-      if (host) {
+      if (urlHost) {
         // Find the language tag that corresponds to the host.
-        tag = tags.find((t) => langTagsHosts?.[t]?.toLowerCase() === host)
+        tag = tags.find((t) => langTagsHosts?.[t]?.toLowerCase() === urlHost)
         if (tag) return tag
       }
     }
@@ -393,11 +378,11 @@ corresponding host defined.
     // Language tag url search param key.
     const key = searchParamKey || 'l'
 
-    const path = urlPath || location?.search
+    const strUrl = url || location?.search
 
-    if (path) {
-      const url = new URL(`http://localhost${path}`)
-      const searchParams = new URLSearchParams(url.search)
+    if (strUrl) {
+      const objUrl = new URL(`http://localhost${strUrl}`)
+      const searchParams = new URLSearchParams(objUrl.search)
       const searchParamLangTag = searchParams.get(key)?.toLowerCase()
 
       if (searchParamLangTag) {
@@ -414,7 +399,7 @@ corresponding host defined.
 
   // Determine the language tag based on a cookie.
   if (useCookie) {
-    const langTagCookie = getLangTagCookie({ cookieKey, cookies })
+    const langTagCookie = getLangTagCookie({ cookieKey, cookie, req })
 
     if (langTagCookie) {
       // Find the language tag that corresponds to the stored cookie.
@@ -427,18 +412,22 @@ corresponding host defined.
   if (useClientPreferredLangTags) {
     let prefs = clientPreferredLangTags
 
-    // In a `dom` environment.
-    if (!prefs && navigator?.languages?.length) {
-      // Quality value unit.
-      const qUnit = 1 / navigator.languages.length
+    if (!prefs) {
+      // In a `dom` environment.
+      if (navigator?.languages?.length) {
+        // Quality value unit.
+        const qUnit = 1 / navigator.languages.length
 
-      prefs = navigator.languages
-        .map((l, i) => {
-          // Quality values are up to three decimal digits.
-          const q = Math.floor(1000 * (1 - i * qUnit)) / 1000
-          return `${l};q=${q}`
-        })
-        .join(', ')
+        prefs = navigator.languages
+          .map((l, i) => {
+            // Quality values are up to three decimal digits.
+            const q = Math.floor(1000 * (1 - i * qUnit)) / 1000
+            return `${l};q=${q}`
+          })
+          .join(', ')
+      } else if (navigator?.language) {
+        prefs = navigator.language
+      }
     }
 
     if (prefs) {

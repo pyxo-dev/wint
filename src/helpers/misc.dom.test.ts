@@ -5,14 +5,14 @@ import { getPathHref } from '.'
  * getPathHref function.
  */
 
-const urlPath = '/blog/recent?key=value'
+const path = '/blog/recent?key=value'
 const langTag = 'en'
 
 test('[getPathHref] Prefix mode.', () => {
   const dom = new JSDOM('', { url: 'https://example.com' })
   globalThis.location = dom.window.location
 
-  expect(getPathHref({ urlPath, langTag })).toBe(
+  expect(getPathHref({ path, langTag })).toBe(
     'https://example.com/en/blog/recent?key=value'
   )
 })
