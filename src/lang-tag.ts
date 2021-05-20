@@ -278,7 +278,7 @@ export function getLangTag(options: GetLangTagOptions): string | undefined {
   } = Object.assign({}, reqOpts, options)
 
   // Remove duplicates if any.
-  const tags = [...new Set(langTags)]
+  const tags = Array.from(new Set(langTags))
 
   // Validate the list of language tags.
   if (tags.length === 0 || tags.includes('')) {
