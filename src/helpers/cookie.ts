@@ -1,6 +1,6 @@
 import type { CookieSerializeOptions } from 'cookie'
 import { parse, serialize } from 'cookie'
-import type { WintServerContext } from '..'
+import type { WintServerContext } from '../types'
 
 /**
  * Options for `getLangTagCookie` function.

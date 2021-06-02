@@ -1,5 +1,5 @@
-import type { WintServerContext, WintUrlConf } from '.'
-import { getPathHref } from '.'
+import { getPathHref } from './helpers/misc'
+import type { WintServerContext, WintUrlConf } from './types'
 
 /**
  * An object representing an hreflang link tag.

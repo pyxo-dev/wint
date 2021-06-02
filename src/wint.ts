@@ -1,21 +1,15 @@
 import type {
   GetLangTagCookieOptions,
-  GetLangTagOptions,
-  GetPathHrefOptions,
-  HreflangOptions,
-  HreflangPathsOptions,
   SetLangTagCookieOptions,
-  WintConf,
-  WintServerContext,
-} from '.'
-import {
-  getLangTag,
-  getLangTagCookie,
-  getPathHref,
-  hreflang,
-  hreflangPaths,
-  setLangTagCookie,
-} from '.'
+} from './helpers/cookie'
+import { getLangTagCookie, setLangTagCookie } from './helpers/cookie'
+import type { GetPathHrefOptions } from './helpers/misc'
+import { getPathHref } from './helpers/misc'
+import type { HreflangOptions, HreflangPathsOptions } from './hreflang'
+import { hreflang, hreflangPaths } from './hreflang'
+import type { GetLangTagOptions } from './lang-tag'
+import { getLangTag } from './lang-tag'
+import type { WintConf, WintServerContext } from './types'
 
 /**
  * Wint instance.

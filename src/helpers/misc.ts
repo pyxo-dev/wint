@@ -1,4 +1,4 @@
-import type { WintServerContext, WintUrlConf } from '..'
+import type { WintServerContext, WintUrlConf } from '../types'
 
 /**
  * Options for `getPathHref` function.

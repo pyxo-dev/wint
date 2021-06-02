@@ -1,6 +1,6 @@
 import Negotiator from 'negotiator'
-import type { WintServerContext, WintUrlConf } from '.'
-import { getLangTagCookie } from '.'
+import { getLangTagCookie } from './helpers/cookie'
+import type { WintServerContext, WintUrlConf } from './types'
 
 /**
  * Options for `getLangTag` function.
